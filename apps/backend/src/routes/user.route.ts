@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import prisma from '@/db/index'
+import prisma from '@repo/db/client'
 const router: Router = Router()
 router.get('/', async (req, res) => {
   const users = await prisma.user.findMany()

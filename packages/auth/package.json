@@ -1,0 +1,22 @@
+{
+	"name": "@repo/auth",
+	"version": "0.0.0",
+	"type": "module",
+	"private": true,
+	"module": "index.ts",
+	"exports": {
+		"./auth-client": "./src/auth-client.ts",
+		"./auth": "./src/auth.ts"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:*"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@repo/db": "workspace:*",
+		"axios": "^1.10.0",
+		"better-auth": "^1.2.9"
+	}
+}

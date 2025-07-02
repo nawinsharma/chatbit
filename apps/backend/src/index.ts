@@ -3,7 +3,7 @@ import { userRoute } from '@/routes/index'
 import cors from 'cors'
 import dotenv from 'dotenv'
 dotenv.config({ path: './env' })
-const PORT = process.env.PORT || 6969
+const PORT = process.env.PORT || 8080
 const app = express()
 app.use(express.json())
 app.use(cors())
