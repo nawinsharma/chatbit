@@ -18,7 +18,10 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sonner": "^2.0.5",
-    "tailwind-merge": "^2.5.2"
+    "tailwind-merge": "^2.5.2",
+    "@repo/auth": "*",
+    "@repo/db": "*",
+    "@repo/ui": "*"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

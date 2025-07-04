@@ -4,9 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MessageCircle, Menu, X, User, LogOut } from "lucide-react";
-import { authClient } from "@/auth-client";
 import { toast } from "sonner";
-
+import { authClient } from "@repo/auth/auth-client";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
