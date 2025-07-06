@@ -2,11 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "private": true,
   "scripts": {
-    "start": "tsup && node dist/index.js",
-    "dev": "tsup --watch --onSuccess \"node dist/index.js\"",
-    "build": "tsup",
+  "build": "tsup src/index.ts --minify --dts --out-dir dist",
+    "start": "node dist/index.js",
+    "dev": "pnpm build && pnpm start",
     "clean": "rm -rf dist"
   },
   "keywords": [],
@@ -15,7 +14,6 @@
   "description": "",
   "dependencies": {
     "@repo/db": "*",
-    "@repo/auth": "*",
     "better-auth": "^1.2.12",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
