@@ -1,0 +1,17 @@
+import Env from "@/lib/env";
+
+export async function fetchChats(groupId: string) {
+  const res = await fetch(`${Env.BACKEND_URL}/api/chats/${groupId}`, {
+    cache: "no-cache",
+  });
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+  const response = await res.json();
+  if (response?.data) {
+    return response?.data;
+  }
+  return [];
+}
