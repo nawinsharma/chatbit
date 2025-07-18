@@ -10,7 +10,7 @@ import React from "react";
 
 export default async function chat(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
-  if (id.length !== 36) {
+  if (id.length != 36) {
     return notFound();
   }
   const chatGroup: GroupChatType | null = await fetchChatGroup(id);

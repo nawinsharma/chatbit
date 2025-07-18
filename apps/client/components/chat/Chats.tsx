@@ -27,7 +27,7 @@ export default function Chats({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  let socket = useMemo(() => {
+  const  socket = useMemo(() => {
     const socket = getSocket();
     socket.auth = {
       room: group.id,
