@@ -1,5 +1,4 @@
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
+import { authClient } from "@/lib/auth-client"
 import { redirect } from "next/navigation"
 
 export default async function AuthLayout({
@@ -7,9 +6,7 @@ export default async function AuthLayout({
 }: Readonly<{
    children: React.ReactNode;
 }>) {
-   const session = await auth.api.getSession({
-      headers: await headers()
-   })
+   const { data: session } = await authClient.getSession();
 
    if (session) {
       return redirect("/")

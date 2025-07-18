@@ -1,10 +1,8 @@
 import Env from "@/lib/env";
 
-export async function fetchChatGroups(token: string) {
+export async function fetchChatGroups() {
   const res = await fetch(`${Env.BACKEND_URL}/api/chat-group`, {
-    headers: {
-      Authorization: token,
-    },
+    credentials: 'include',
     next: {
       revalidate: 60 * 60,
       tags: ["dashboard"],
@@ -38,7 +36,7 @@ export async function fetchChatGroup(id: string) {
 }
 
 export async function fetchChatGroupUsers(id: string) {
-  const res = await fetch(`${Env.BACKEND_URL}/api/chat-group-users?group_id=${id}`, {
+  const res = await fetch(`${Env.BACKEND_URL}/api/chat-group-user?group_id=${id}`, {
     cache: "no-cache",
   });
 
