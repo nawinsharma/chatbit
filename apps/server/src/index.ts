@@ -12,7 +12,8 @@ import { Server as SocketIOServer } from "socket.io";
 import { setupSocket } from "./socket";
 import { connectKafkaProducer } from "./lib/kafka";
 const app = express();
-const router = Router();app.use(
+const router = Router();
+app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "",
     methods: ["GET", "POST", "OPTIONS"],

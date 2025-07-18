@@ -116,7 +116,7 @@ class ChatGroupController {
           user_id: user?.id,
         },
       });
-      return res.json({ message: "Chat Deleted successfully!" });
+      return res.json({ message: "Chat Group Deleted successfully!" });
     } catch (error) {
       return res
         .status(500)
