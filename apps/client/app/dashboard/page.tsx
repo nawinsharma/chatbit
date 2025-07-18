@@ -1,18 +1,61 @@
-import ProfileCard from "@/components/profile-card"
+"use client";
 
-export default function DashboardPage() {
-   return (
-      <div className="flex flex-col gap-6 w-full">
-         <div className="flex flex-col gap-2">
-            <h2 className="text-3xl font-bold tracking-tight">
-               Welcome back!
-            </h2>
-         </div>
+import CreateChat from "@/components/chatGroup/CreateChat";
+import DashNav from "@/components/chatGroup/DashNav";
+import React, { useEffect, useState } from "react";
+import { fetchChatGroups } from "@/fetch/groupFetch";
+import GroupChatCard from "@/components/chatGroup/GroupChatCard";
+import { GroupChatType } from "@/type";
+import { redirect, useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
-         <div className="grid gap-6 lg:grid-cols-[1fr_2fr]">
-            <ProfileCard />
-         </div>
+export default function dashboard() {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+  const [groups, setGroups] = useState<GroupChatType[]>([]);
+
+  useEffect(() => {
+    if (!session && !isPending) {
+      router.push("/sign-in");
+    }
+  }, [session, isPending]);
+
+  useEffect(() => {
+    async function loadGroups() {
+      if (session) {
+        const data = await fetchChatGroups();
+        setGroups(data);
+      }
+    }
+    loadGroups();
+  }, [session]);
+
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+  const token = session?.session?.token || '';
+  const user = session?.user
+    ? { ...session.user, token }
+    : { id: '', name: '', email: '', emailVerified: false, createdAt: new Date(), updatedAt: new Date(), image: null, token: '' };
+
+
+  return (
+    <div>
+      <DashNav
+        name={session?.user.name!}
+        image={session?.user.image ?? undefined}
+      />
+      <div className="container">
+        <div className="mt-6 text-end">
+          <CreateChat />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {groups.length > 0 &&
+            groups.map((item, index) => (
+              <GroupChatCard group={item} key={index} user={user} />
+            ))}
+        </div>
       </div>
-   )
+    </div>
+  );
 }
-

@@ -1,5 +1,4 @@
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
+import { authClient } from '@/lib/auth-client'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
@@ -8,10 +7,7 @@ export default function SignOutForm(
 ) {
    return (
       <form action={async () => {
-         'use server'
-         await auth.api.signOut({
-            headers: await headers()
-         })
+         await authClient.signOut();
          redirect("/")
       }}>
          {children}

@@ -23,6 +23,7 @@ import { authClient } from "@/lib/auth-client"
 import { signInFormSchema } from "@/lib/auth-schema"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -117,9 +118,9 @@ export default function SignInForm() {
          <CardFooter className="mx-auto">
             <div className="text-center text-sm">
                Don&apos;t have an account?{" "}
-               <a href="sign-up" className="underline underline-offset-4">
+               <Link href="/sign-up" className="underline underline-offset-4">
                   Sign up
-               </a>
+               </Link>
             </div>
          </CardFooter>
       </Card>

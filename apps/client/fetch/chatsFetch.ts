@@ -1,6 +1,8 @@
 import Env from "@/lib/env";
 
 export async function fetchChats(groupId: string) {
+  console.log(Env.BACKEND_URL);
+  
   const res = await fetch(`${Env.BACKEND_URL}/api/chats/${groupId}`, {
     cache: "no-cache",
   });

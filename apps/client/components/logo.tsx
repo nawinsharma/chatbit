@@ -8,7 +8,7 @@ export default function Logo() {
          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Lock className="size-4" />
          </div>
-         AuthStarter
+         Chat
       </Link>
    )
 }
