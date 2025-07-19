@@ -45,24 +45,24 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.98 0.005 106);
+  --foreground: oklch(0.15 0.005 106);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.15 0.005 106);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.15 0.005 106);
+  --primary: oklch(0.26 0.08 264);
+  --primary-foreground: oklch(0.98 0.005 106);
+  --secondary: oklch(0.96 0.015 106);
+  --secondary-foreground: oklch(0.26 0.08 264);
+  --muted: oklch(0.96 0.015 106);
+  --muted-foreground: oklch(0.46 0.025 106);
+  --accent: oklch(0.96 0.015 106);
+  --accent-foreground: oklch(0.26 0.08 264);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.89 0.015 106);
+  --input: oklch(0.89 0.015 106);
+  --ring: oklch(0.46 0.025 106);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -122,4 +122,105 @@
   .container {
     @apply p-8 mx-auto max-w-screen;
   }
+}
+
+.gradient {
+	background: conic-gradient(
+		from 230.29deg at 51.63% 52.16%,
+		rgb(36, 0, 255) 0deg,
+		rgb(0, 135, 255) 67.5deg,
+		rgb(108, 39, 157) 198.75deg,
+		rgb(24, 38, 163) 251.25deg,
+		rgb(54, 103, 196) 301.88deg,
+		rgb(105, 30, 255) 360deg
+	);
+}
+
+/* Light mode gradient */
+.light .gradient {
+	background: conic-gradient(
+		from 230.29deg at 51.63% 52.16%,
+		rgba(147, 51, 234, 0.15) 0deg,
+		rgba(59, 130, 246, 0.15) 67.5deg,
+		rgba(139, 92, 246, 0.15) 198.75deg,
+		rgba(99, 102, 241, 0.15) 251.25deg,
+		rgba(168, 85, 247, 0.15) 301.88deg,
+		rgba(147, 51, 234, 0.15) 360deg
+	);
+}
+
+::-webkit-scrollbar {
+	width: 6px;
+	scrollbar-color: #262626;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #262626;
+	border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0);
+}
+
+/* Toast styling for better visibility */
+[data-sonner-toaster] {
+  --z-index: 999999;
+}
+
+[data-sonner-toast] {
+  border-radius: 0.75rem !important;
+  border-width: 1px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Light mode toast improvements */
+.light [data-sonner-toast] {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.light [data-sonner-toast][data-type="success"] {
+  background: hsl(120, 60%, 95%) !important;
+  color: hsl(120, 100%, 20%) !important;
+  border-color: hsl(120, 60%, 80%) !important;
+}
+
+.light [data-sonner-toast][data-type="error"] {
+  background: hsl(0, 60%, 95%) !important;
+  color: hsl(0, 100%, 20%) !important;
+  border-color: hsl(0, 60%, 80%) !important;
+}
+
+.light [data-sonner-toast][data-type="warning"] {
+  background: hsl(45, 60%, 95%) !important;
+  color: hsl(45, 100%, 20%) !important;
+  border-color: hsl(45, 60%, 80%) !important;
+}
+
+.light [data-sonner-toast][data-type="info"] {
+  background: hsl(210, 60%, 95%) !important;
+  color: hsl(210, 100%, 20%) !important;
+  border-color: hsl(210, 60%, 80%) !important;
+}
+
+/* Dark mode toast styling */
+.dark [data-sonner-toast] {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+.dark [data-sonner-toast][data-type="success"] {
+  background: hsl(120, 40%, 10%) !important;
+  color: hsl(120, 100%, 90%) !important;
+  border-color: hsl(120, 40%, 20%) !important;
+}
+
+.dark [data-sonner-toast][data-type="error"] {
+  background: hsl(0, 40%, 10%) !important;
+  color: hsl(0, 100%, 90%) !important;
+  border-color: hsl(0, 40%, 20%) !important;
 }

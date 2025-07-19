@@ -19,7 +19,7 @@ import { CustomUser } from "@/lib/types";
 import { GroupChatType } from "@/type";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
-import { clearCache } from "@/actions/common";
+import { clearCache } from "@/actions/revalidateCache";
 import Env from "@/lib/env";
 
 export default function EditGroupChat({
@@ -27,11 +27,13 @@ export default function EditGroupChat({
   group,
   open,
   setOpen,
+  onSuccess,
 }: {
   user: CustomUser;
   group: GroupChatType;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  onSuccess?: () => Promise<void>;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -50,17 +52,23 @@ export default function EditGroupChat({
   }, [group]);
 
   const onSubmit = async (payload: createChatSchemaType) => {
-    // console.log("The payload is", payload);
     try {
       setLoading(true);
       const { data } = await axios.put(`${Env.BACKEND_URL}/api/chat-group/${group.id}`, payload, {
+        headers: {
+          Authorization: user.token,
+        },
         withCredentials: true,
       });
 
       if (data?.message) {
         setOpen(false);
         toast.success(data?.message);
+        // Clear cache and refresh data
         clearCache("dashboard");
+        if (onSuccess) {
+          await onSuccess();
+        }
       }
       setLoading(false);
     } catch (error) {

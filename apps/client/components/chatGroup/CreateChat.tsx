@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { PlusIcon } from "lucide-react";
 
 import {
   Dialog,
@@ -18,10 +19,10 @@ import {
 } from "@/zod/chatSchema";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
-import { clearCache } from "@/actions/common";
+import { clearCache } from "@/actions/revalidateCache";
 import Env from "@/lib/env";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function CreateChat() {
+
+export default function CreateChat({ onSuccess }: { onSuccess?: () => Promise<void> }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -29,9 +30,11 @@ export default function CreateChat() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<createChatSchemaType>({
     resolver: zodResolver(createChatSchema),
   });
+  
   const onSubmit = async (payload: createChatSchemaType) => {
     try {
       setLoading(true);
@@ -42,7 +45,12 @@ export default function CreateChat() {
       if (data?.message) {
         setOpen(false);
         toast.success(data?.message);
+        // Clear cache and refresh data
         clearCache("dashboard");
+        if (onSuccess) {
+          await onSuccess();
+        }
+        reset();
       }
       setLoading(false);
     } catch (error) {
@@ -50,7 +58,7 @@ export default function CreateChat() {
       if (error instanceof AxiosError) {
         toast.error(error.message);
       } else {
-        toast.error("Something went wrong.please try again!");
+        toast.error("Something went wrong. Please try again!");
       }
     }
   };
@@ -58,13 +66,15 @@ export default function CreateChat() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Create Chat</Button>
+        <Button className="flex items-center gap-2">
+          <PlusIcon size={20} />
+          Create Room
+        </Button>
       </DialogTrigger>
-      <DialogContent aria-describedby="create-chat-description" onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Create your new Chat</DialogTitle>
         </DialogHeader>
-        <div id="create-chat-description" style={{ display: 'none' }}>Please enter a title and passcode for your new chat group.</div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mt-4">
             <Input placeholder="Enter chat title" {...register("title")} />

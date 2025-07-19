@@ -220,6 +220,7 @@ export type GroupUsersOrderByWithRelationInput = {
 
 export type GroupUsersWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  group_id_name?: Prisma.GroupUsersGroup_idNameCompoundUniqueInput
   AND?: Prisma.GroupUsersWhereInput | Prisma.GroupUsersWhereInput[]
   OR?: Prisma.GroupUsersWhereInput[]
   NOT?: Prisma.GroupUsersWhereInput | Prisma.GroupUsersWhereInput[]
@@ -227,7 +228,7 @@ export type GroupUsersWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"GroupUsers"> | string
   created_at?: Prisma.DateTimeFilter<"GroupUsers"> | Date | string
   group?: Prisma.XOR<Prisma.ChatGroupScalarRelationFilter, Prisma.ChatGroupWhereInput>
-}, "id">
+}, "id" | "group_id_name">
 
 export type GroupUsersOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -304,6 +305,11 @@ export type GroupUsersListRelationFilter = {
 
 export type GroupUsersOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type GroupUsersGroup_idNameCompoundUniqueInput = {
+  group_id: string
+  name: string
 }
 
 export type GroupUsersCountOrderByAggregateInput = {

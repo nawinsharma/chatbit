@@ -10,13 +10,12 @@ import { Router } from "express";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { setupSocket } from "./socket";
-import { connectKafkaProducer } from "./lib/kafka";
 const app = express();
 const router = Router();
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "",
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
@@ -54,13 +53,23 @@ const httpServer = createServer(app);
 
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      process.env.CORS_ORIGIN || "http://localhost:3000"
+    ],
+    methods: ["GET", "POST"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   },
+  allowEIO3: true,
+  transports: ['websocket', 'polling']
 });
+
 setupSocket(io);
 
 httpServer.listen(port, async () => {
   // await connectKafkaProducer();
   console.log(`Server and Socket.IO running on port ${port}`);
+  console.log(`CORS configured for origins: http://localhost:3000, ${process.env.CORS_ORIGIN || 'default'}`);
 });
