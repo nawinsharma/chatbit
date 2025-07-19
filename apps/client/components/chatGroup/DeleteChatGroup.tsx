@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import axios from "axios";
 import { toast } from "sonner";
-import { clearCache } from "@/actions/common";
+import { clearCache } from "@/actions/revalidateCache";
 import Env from "@/lib/env";
 
 export default function DeleteChatGroup({
@@ -19,13 +19,13 @@ export default function DeleteChatGroup({
   setOpen,
   groupId,
   token,
-
-
+  onSuccess,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   groupId: string;
   token: string;
+  onSuccess?: () => Promise<void>;
 }) {
   const [loading, setLoading] = useState(false);
   const deleteChatGroup = async () => {
@@ -35,16 +35,21 @@ export default function DeleteChatGroup({
         headers: {
           Authorization: token,
         },
+        withCredentials: true,
       });
       if (data?.message) {
+        // Clear cache and refresh data
         clearCache("dashboard");
+        if (onSuccess) {
+          await onSuccess();
+        }
         toast.success(data?.message);
         setOpen(false);
       }
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error("Somethign went wrong.please try again later.");
+      toast.error("Something went wrong.please try again later.");
     }
   };
 
