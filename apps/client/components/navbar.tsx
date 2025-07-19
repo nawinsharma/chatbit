@@ -17,6 +17,7 @@ import SignOutForm from './sign-out-form';
 import Link from 'next/link';
 import Logo from './logo';
 import { usePathname } from 'next/navigation';
+import { LogOutIcon } from "lucide-react";
 
 export function Nav() {
   const { data: session } = authClient.useSession();
@@ -72,11 +73,10 @@ export function Nav() {
                 )}
                 <SignOutForm>
                   <NavbarButton 
-                    variant="dark"
+                    className="bg-red-500 text-white hover:bg-red-600"
                     as="button"
-                    type="submit"
                   >
-                    Sign Out
+                    <LogOutIcon className="h-3 w-3" />
                   </NavbarButton>
                 </SignOutForm>
               </>
@@ -138,8 +138,7 @@ export function Nav() {
                   )}
                   <SignOutForm>
                     <button
-                      type="submit"
-                      className="block w-full text-left py-2 text-foreground hover:text-primary transition-colors"
+                      className="block w-full text-left py-2 bg-red-500 text-white hover:bg-red-600 transition-colors"
                     >
                       Sign Out
                     </button>

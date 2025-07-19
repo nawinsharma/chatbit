@@ -5,7 +5,7 @@ import MobileChatSidebar from "./MobileChatSidebar";
 import { GroupChatType, GroupChatUserType } from "@/type";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { MessageSquareIcon, UsersIcon, ArrowLeftIcon } from "lucide-react";
+import { UsersIcon, ArrowLeftIcon } from "lucide-react";
 
 export default function ChatNav({
   chatGroup,
@@ -38,9 +38,6 @@ export default function ChatNav({
           <ArrowLeftIcon className="h-4 w-4" />
         </Button>
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-sm">
-            <MessageSquareIcon className="h-5 w-5" />
-          </div>
           <div className="flex flex-col">
             <h1 className="text-xl font-heading font-semibold text-foreground">
               {chatGroup.title}

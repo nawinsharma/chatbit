@@ -196,7 +196,7 @@ const Footer = () => {
 			</div>
 
 			<div className="hidden h-[20rem] items-center justify-center md:flex lg:h-[20rem]">
-				<TextHoverEffect text="NAWIN" />
+				<TextHoverEffect text="CHATBIT" />
 			</div>
 		</footer>
 	);

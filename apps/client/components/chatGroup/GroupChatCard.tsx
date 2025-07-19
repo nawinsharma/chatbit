@@ -3,7 +3,7 @@ import { CustomUser } from "@/lib/types";
 import { GroupChatType } from "@/type";
 import GroupChatCardMenu from "./GroupChatCardMenu";
 import { useRouter } from "next/navigation";
-import { MessageSquareIcon, UsersIcon, KeyIcon } from "lucide-react";
+import { UsersIcon, KeyIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function GroupChatCard({
@@ -51,9 +51,6 @@ export default function GroupChatCard({
       <div className="relative z-10 p-6 space-y-4">
         {/* Header with icon */}
         <div className="flex items-center space-x-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-sm">
-            <MessageSquareIcon className="h-6 w-6" />
-          </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-lg text-card-foreground truncate group-hover:text-foreground transition-colors">
               {group.title}

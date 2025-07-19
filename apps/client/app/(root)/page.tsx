@@ -1,8 +1,9 @@
 "use client";
 import { AnimationContainer, MaxWidthWrapper } from "@/components/global";
+import { CoolMode } from "@/components/magicui/cool-mode";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { BentoCard, BentoGrid, CARDS } from "@/components/ui/bento-grid";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -21,10 +22,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const HomePage = () => {
-  const { data: session } = authClient.useSession();
-  const user = session?.user; 
+	const { data: session } = authClient.useSession();
+	const user = session?.user;
 	return (
-		<div className="scrollbar-hide size-full overflow-x-hidden pt-24">
+		<div className="scrollbar-hide size-full overflow-x-hidden pt-24 bg-gradient-to-b from-background/100 to-background ">
 			{/* Hero Section */}
 			<MaxWidthWrapper>
 				<div
@@ -57,15 +58,19 @@ const HomePage = () => {
 							</span>
 						</p>
 						<div className="z-50 flex items-center justify-center gap-4 whitespace-nowrap">
-							<Button asChild>
-								<Link
-									href={user ? "/dashboard" : "/sign-in"}
-									className="flex items-center"
-								>
-									Start chatting for free
-									<ArrowRightIcon className="ml-2 h-4 w-4" />
-								</Link>
-							</Button>
+							<Link
+								href={user ? "/dashboard" : "/sign-in"}
+								className="flex items-center text-white"
+							>
+								<CoolMode>
+									<ShimmerButton>
+										<span className="flex items-center text-white">
+											Start chatting for free
+											<ArrowRightIcon className="ml-2 h-4 w-4" />
+										</span>
+									</ShimmerButton>
+								</CoolMode>
+							</Link>
 						</div>
 					</AnimationContainer>
 
@@ -205,31 +210,31 @@ const HomePage = () => {
 				</AnimationContainer>
 				<div className="grid grid-cols-1 place-items-start gap-4 py-10 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
 					<div className="flex h-min flex-col items-start gap-6">
-              {REVIEWS.slice(0, 3).map((review, index) => (
-                <AnimationContainer delay={0.2 * index} key={index}>
-                  <MagicCard key={index} className="md:p-0">
-                    <Card className="flex h-min w-full flex-col border-none">
-                      <CardHeader className="space-y-0">
-                        <CardTitle className="font-medium text-lg text-muted-foreground">
-                          {review.name}
-                        </CardTitle>
-                        <CardDescription>{review.username}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-4 pb-4">
-                        <p className="text-muted-foreground">{review.review}</p>
-                      </CardContent>
-                      <CardFooter className="mt-auto w-full space-x-1">
-                        {Array.from({ length: review.rating }, (_, i) => (
-                          <StarIcon
-                            key={i}
-                            className="h-4 w-4 fill-yellow-500 text-yellow-500"
-                          />
-                        ))}
-                      </CardFooter>
-                    </Card>
-                  </MagicCard>
-                </AnimationContainer>
-              ))}
+						{REVIEWS.slice(0, 3).map((review, index) => (
+							<AnimationContainer delay={0.2 * index} key={index}>
+								<MagicCard key={index} className="md:p-0">
+									<Card className="flex h-min w-full flex-col border-none">
+										<CardHeader className="space-y-0">
+											<CardTitle className="font-medium text-lg text-muted-foreground">
+												{review.name}
+											</CardTitle>
+											<CardDescription>{review.username}</CardDescription>
+										</CardHeader>
+										<CardContent className="space-y-4 pb-4">
+											<p className="text-muted-foreground">{review.review}</p>
+										</CardContent>
+										<CardFooter className="mt-auto w-full space-x-1">
+											{Array.from({ length: review.rating }, (_, i) => (
+												<StarIcon
+													key={i}
+													className="h-4 w-4 fill-yellow-500 text-yellow-500"
+												/>
+											))}
+										</CardFooter>
+									</Card>
+								</MagicCard>
+							</AnimationContainer>
+						))}
 					</div>
 					<div className="flex h-min flex-col items-start gap-6">
 						{REVIEWS.slice(3, 6).map((review, index) => (
@@ -289,7 +294,7 @@ const HomePage = () => {
 			</MaxWidthWrapper>
 
 			{/* CTA Section */}
-			<MaxWidthWrapper className="scrollbar-hide mt-20 max-w-[100vw] overflow-x-hidden">
+			<MaxWidthWrapper className="scrollbar-hide mt-20 max-w-[100vw] overflow-hidden">
 				<AnimationContainer delay={0.1}>
 					<LampContainer>
 						<div className="relative flex w-full flex-col items-center justify-center text-center">
@@ -302,10 +307,19 @@ const HomePage = () => {
 								connections and achieve remarkable results together.
 							</p>
 							<div className="mt-6">
-								<Button>
-									<Link href="/sign-in">Create Your First Chat Room</Link>
-									<ArrowRightIcon className="ml-2 h-4 w-4" />
-								</Button>
+								<Link
+									href={user ? "/dashboard" : "/sign-in"}
+									className="flex items-center text-white"
+								>
+									<CoolMode>
+										<ShimmerButton>
+											<span className="flex items-center text-white">
+												Create Your First Chat Room
+												<ArrowRightIcon className="ml-2 h-4 w-4" />
+											</span>
+										</ShimmerButton>
+									</CoolMode>
+								</Link>
 							</div>
 						</div>
 					</LampContainer>
