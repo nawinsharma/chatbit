@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ChatUserDialog from "./ChatUserDialog";
 import ChatSidebar from "./ChatSidebar";
 import Chats from "./Chats";
@@ -29,21 +29,21 @@ export default function ChatBase({
   }, [group.id]);
 
   // Function to refresh users list
-  const refreshUsers = async () => {
+  const refreshUsers = useCallback(async () => {
     try {
       const updatedUsers = await fetchChatGroupUsers(group.id);
       setUsers(updatedUsers);
     } catch (error) {
       console.error("Failed to refresh users:", error);
     }
-  };
+  }, [group.id]);
 
   // Refresh users when dialog closes (after successful join)
   useEffect(() => {
     if (!open) {
       refreshUsers();
     }
-  }, [open, group.id]);
+  }, [open, refreshUsers]);
   
   return (
     <div className="flex h-screen bg-background">

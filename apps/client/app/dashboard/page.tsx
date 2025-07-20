@@ -1,7 +1,7 @@
 "use client";
 
 import CreateChat from "@/components/chatGroup/CreateChat";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { fetchChatGroups } from "@/fetch/groupFetch";
 import GroupChatCard from "@/components/chatGroup/GroupChatCard";
 import { GroupChatType } from "@/type";
@@ -16,10 +16,12 @@ export default function Dashboard() {
   const { data: session, isPending } = authClient.useSession();
   const [groups, setGroups] = useState<GroupChatType[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const isRefreshingRef = useRef(false);
 
   // Function to refresh groups data
   const refreshGroups = useCallback(async () => {
-    if (session && !isRefreshing) {
+    if (session && !isRefreshingRef.current) {
+      isRefreshingRef.current = true;
       setIsRefreshing(true);
       try {
         const data = await fetchChatGroups();
@@ -27,26 +29,29 @@ export default function Dashboard() {
       } catch (error) {
         console.error("Failed to refresh groups:", error);
       } finally {
+        isRefreshingRef.current = false;
         setIsRefreshing(false);
       }
     }
-  }, [session, isRefreshing]);
+  }, [session]);
+
+  // Function to load groups
+  const loadGroups = useCallback(async () => {
+    if (session) {
+      const data = await fetchChatGroups();
+      setGroups(data);
+    }
+  }, [session]);
 
   useEffect(() => {
     if (!session && !isPending) {
       router.push("/sign-in");
     }
-  }, [session, isPending]);
+  }, [session, isPending, router]);
 
   useEffect(() => {
-    async function loadGroups() {
-      if (session) {
-        const data = await fetchChatGroups();
-        setGroups(data);
-      }
-    }
     loadGroups();
-  }, [session]);
+  }, [loadGroups]);
 
   if (isPending) {
     return (
