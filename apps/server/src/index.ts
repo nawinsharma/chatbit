@@ -12,12 +12,14 @@ import { Server as SocketIOServer } from "socket.io";
 import { setupSocket } from "./socket";
 import { redis } from "./config/redis";
 import { createAdapter } from "@socket.io/redis-streams-adapter";
+
 const app = express();
 const router = Router();
 
 const httpServer = createServer(app);
 
-const io = new SocketIOServer(httpServer, {
+// Socket.IO configuration with optional Redis adapter
+const socketIOConfig: any = {
   cors: {
     origin: [
       "http://localhost:3000",
@@ -25,8 +27,21 @@ const io = new SocketIOServer(httpServer, {
       "https://chatbit.nawin.xyz",
     ],
   },
-  adapter: createAdapter(redis),
-});
+};
+
+// Only use Redis adapter if REDIS_URL is available
+if (process.env.REDIS_URL) {
+  try {
+    socketIOConfig.adapter = createAdapter(redis);
+    console.log("✅ Using Redis adapter for Socket.IO");
+  } catch (error) {
+    console.warn("⚠️ Failed to create Redis adapter, using in-memory adapter:", error);
+  }
+} else {
+  console.log("ℹ️ No REDIS_URL provided, using in-memory adapter for Socket.IO");
+}
+
+const io = new SocketIOServer(httpServer, socketIOConfig);
 setupSocket(io);
 
 app.use(
