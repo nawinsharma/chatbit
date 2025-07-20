@@ -7,7 +7,7 @@
     "check-types": "tsc --noEmit",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "tsx watch src/index.ts",
-    "start": "node dist/src/index.js"
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@prisma/client": "^6.10.1",
@@ -19,6 +19,7 @@
     "ioredis": "^5.6.1",
     "kafkajs": "^2.2.4",
     "socket.io": "^4.8.1",
+    "tsdown": "^0.12.9",
     "zod": "^4.0.2"
   },
   "devDependencies": {
@@ -28,7 +29,6 @@
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.11",
     "prisma": "^6.10.1",
-    "tsdown": "^0.12.9",
     "tsx": "^4.19.2",
     "typescript": "^5.8.2"
   }
