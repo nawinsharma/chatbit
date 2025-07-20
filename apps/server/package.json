@@ -3,7 +3,8 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown && pnpm run postbuild",
+    "postbuild": "mkdir -p dist/prisma && cp -r prisma/generated dist/prisma/ 2>/dev/null || true",
     "check-types": "tsc --noEmit",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "tsx watch src/index.ts",
