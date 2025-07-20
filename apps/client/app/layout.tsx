@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     title: "Chatbit - Scalable Real-Time Group Chat Platform",
     description: "Experience lightning-fast group messaging that scales to millions of users. Built with Socket.io, Redis, and Kafka for enterprise-grade performance.",
     type: "website",
-    url: "http://localhost:3000",
+    url: "https://chatbit.nawin.xyz",
     images: [
       {
         url: "/og-image.png",

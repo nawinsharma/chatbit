@@ -22,7 +22,7 @@ const io = new SocketIOServer(httpServer, {
     origin: [
       "http://localhost:3000",
       "http://127.0.0.1:3000",
-      process.env.CORS_ORIGIN || "http://localhost:3000",
+      "https://chatbit.nawin.xyz",
     ],
   },
   adapter: createAdapter(redis),
@@ -31,7 +31,6 @@ setupSocket(io);
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
