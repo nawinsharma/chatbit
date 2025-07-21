@@ -2,16 +2,22 @@
   "name": "server",
   "main": "src/index.ts",
   "type": "module",
+  "prisma": {
+    "schema": "./prisma/schema/schema.prisma"
+  },
   "scripts": {
-    "build": "tsdown && pnpm run postbuild && prisma generate",
-    "postbuild": "mkdir -p dist/prisma && cp -r prisma/generated dist/prisma/ 2>/dev/null || true",
+    "build": "tsdown && prisma generate",
     "check-types": "tsc --noEmit",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "tsx watch src/index.ts",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:migrate": "prisma migrate dev",
+    "postinstall": "prisma generate",
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@prisma/client": "^6.10.1",
+    "@prisma/client": "^5.9.0",
     "@socket.io/redis-streams-adapter": "^0.2.2",
     "better-auth": "^1.2.10",
     "cors": "^2.8.5",
@@ -27,7 +33,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.11",
-    "prisma": "^6.10.1",
+    "prisma": "^5.9.0",
     "tsx": "^4.19.2",
     "typescript": "^5.8.2"
   }
