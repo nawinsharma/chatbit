@@ -208,12 +208,6 @@ importers:
         specifier: ^4.0.2
         version: 4.0.5
     devDependencies:
-      '@repo/db':
-        specifier: '*'
-        version: link:../../packages/db
-      '@repo/typescript-config':
-        specifier: '*'
-        version: link:../../packages/typescript-config
       '@types/cors':
         specifier: ^2.8.17
         version: 2.8.19
