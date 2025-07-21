@@ -1,7 +1,6 @@
 {
   "name": "server",
   "main": "src/index.ts",
-  "type": "module",
   "prisma": {
     "schema": "./prisma/schema/schema.prisma"
   },
