@@ -91,7 +91,19 @@ router.get("/chats/:groupId", ChatsController.index);
 
 const port = parseInt(process.env.PORT || "8080", 10);
 
+console.log(`🚀 Starting server...`);
+console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
+console.log(`🔌 Port: ${port}`);
+console.log(`🌐 Binding to: 0.0.0.0`);
+
 httpServer.listen(port, "0.0.0.0", () => {
   // await connectKafkaProducer();
-  console.log(`Server and Socket.IO running on port ${port}`);
+  console.log(`✅ Server and Socket.IO running on port ${port}`);
+  console.log(`🌍 Server is accessible at: http://0.0.0.0:${port}`);
+});
+
+// Add error handling for the server
+httpServer.on('error', (error) => {
+  console.error('❌ Server error:', error);
+  process.exit(1);
 });
