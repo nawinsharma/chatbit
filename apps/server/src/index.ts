@@ -67,6 +67,14 @@ app.get("/", (_req: Request, res: Response) => {
   res.status(200).send("OK");
 });
 
+app.get("/health", (_req: Request, res: Response) => {
+  res.status(200).json({ 
+    status: "OK", 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
 // Chat Group Routes
 router.get("/chat-group", ChatGroupController.index);
 router.get("/chat-group/:id", ChatGroupController.show);
@@ -81,9 +89,9 @@ router.post("/chat-group-user", ChatGroupUserController.store);
 // * Chats
 router.get("/chats/:groupId", ChatsController.index);
 
-const port = process.env.PORT || 8080;
+const port = parseInt(process.env.PORT || "8080", 10);
 
-httpServer.listen(port, async () => {
+httpServer.listen(port, "0.0.0.0", () => {
   // await connectKafkaProducer();
   console.log(`Server and Socket.IO running on port ${port}`);
 });

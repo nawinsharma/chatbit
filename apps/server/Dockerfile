@@ -38,6 +38,6 @@ RUN npm install --production
 
 COPY --chown=node:node --from=engine-builder  /app/node_modules/.prisma/client ./node_modules/.prisma/client
 
-EXPOSE 4500
+EXPOSE 8080
 
-CMD ["node", "src/index.js"]
+CMD ["node", "index.js"]
