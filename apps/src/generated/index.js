@@ -197,10 +197,11 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/nawin/scalable-chatapp/apps/server/src/generated",
+      "value": "/home/nawin/scalable-chatapp/apps/src/generated",
       "fromEnvVar": null
     },
     "config": {
+      "moduleFormat": "commonjs",
       "engineType": "library"
     },
     "binaryTargets": [
@@ -211,14 +212,14 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/nawin/scalable-chatapp/apps/server/prisma/schema/schema.prisma",
+    "sourceFilePath": "/home/nawin/scalable-chatapp/apps/server/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
     "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "schemaEnvPath": "../../server/.env"
   },
-  "relativePath": "../../prisma/schema",
+  "relativePath": "../../server/prisma",
   "clientVersion": "5.22.0",
   "engineVersion": "605197351a3c8bdd595af2d2a9bc3025bca48ea2",
   "datasourceNames": [
@@ -234,8 +235,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../../src/generated\"\n}\n\ndatasource db {\n  provider = \"postgres\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String      @id @map(\"_id\")\n  name          String\n  email         String\n  emailVerified Boolean\n  image         String?\n  createdAt     DateTime\n  updatedAt     DateTime\n  sessions      Session[]\n  accounts      Account[]\n  chatGroups    ChatGroup[]\n\n  @@unique([email])\n  @@map(\"user\")\n}\n\nmodel Session {\n  id        String   @id @map(\"_id\")\n  expiresAt DateTime\n  token     String\n  createdAt DateTime\n  updatedAt DateTime\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id @map(\"_id\")\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime\n  updatedAt             DateTime\n\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String    @id @map(\"_id\")\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime?\n  updatedAt  DateTime?\n\n  @@map(\"verification\")\n}\n\nmodel ChatGroup {\n  id         String       @id @default(uuid()) @db.Uuid\n  user       User         @relation(fields: [user_id], references: [id], onDelete: Cascade)\n  user_id    String\n  title      String       @db.VarChar(191)\n  passcode   String       @db.VarChar(20)\n  created_at DateTime     @default(now())\n  Chats      Chats[]\n  GroupUsers GroupUsers[]\n\n  @@index([user_id, created_at])\n  @@map(\"chat_groups\")\n}\n\nmodel GroupUsers {\n  id         Int       @id @default(autoincrement())\n  group      ChatGroup @relation(fields: [group_id], references: [id], onDelete: Cascade)\n  group_id   String    @db.Uuid\n  name       String\n  created_at DateTime  @default(now())\n\n  @@unique([group_id, name])\n  @@map(\"group_users\")\n}\n\nmodel Chats {\n  id         String    @id @default(uuid())\n  group      ChatGroup @relation(fields: [group_id], references: [id], onDelete: Cascade)\n  group_id   String    @db.Uuid\n  message    String?\n  name       String\n  file       String?\n  created_at DateTime  @default(now())\n\n  @@index([created_at])\n  @@map(\"chats\")\n}\n",
-  "inlineSchemaHash": "364518db0861f457f31fdb72e489bae2a0550d35e31698ee137d02ede2297c2a",
+  "inlineSchema": "generator client {\n  provider     = \"prisma-client-js\"\n  output       = \"../../src/generated\"\n  moduleFormat = \"commonjs\"\n}\n\ndatasource db {\n  provider = \"postgres\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String      @id @map(\"_id\")\n  name          String\n  email         String\n  emailVerified Boolean\n  image         String?\n  createdAt     DateTime\n  updatedAt     DateTime\n  sessions      Session[]\n  accounts      Account[]\n  chatGroups    ChatGroup[]\n\n  @@unique([email])\n  @@map(\"user\")\n}\n\nmodel Session {\n  id        String   @id @map(\"_id\")\n  expiresAt DateTime\n  token     String\n  createdAt DateTime\n  updatedAt DateTime\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id @map(\"_id\")\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime\n  updatedAt             DateTime\n\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String    @id @map(\"_id\")\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime?\n  updatedAt  DateTime?\n\n  @@map(\"verification\")\n}\n\nmodel ChatGroup {\n  id         String       @id @default(uuid()) @db.Uuid\n  user       User         @relation(fields: [user_id], references: [id], onDelete: Cascade)\n  user_id    String\n  title      String       @db.VarChar(191)\n  passcode   String       @db.VarChar(20)\n  created_at DateTime     @default(now())\n  Chats      Chats[]\n  GroupUsers GroupUsers[]\n\n  @@index([user_id, created_at])\n  @@map(\"chat_groups\")\n}\n\nmodel GroupUsers {\n  id         Int       @id @default(autoincrement())\n  group      ChatGroup @relation(fields: [group_id], references: [id], onDelete: Cascade)\n  group_id   String    @db.Uuid\n  name       String\n  created_at DateTime  @default(now())\n\n  @@unique([group_id, name])\n  @@map(\"group_users\")\n}\n\nmodel Chats {\n  id         String    @id @default(uuid())\n  group      ChatGroup @relation(fields: [group_id], references: [id], onDelete: Cascade)\n  group_id   String    @db.Uuid\n  message    String?\n  name       String\n  file       String?\n  created_at DateTime  @default(now())\n\n  @@index([created_at])\n  @@map(\"chats\")\n}\n",
+  "inlineSchemaHash": "8847d4cb21bac753fb0575000dfc676ef02315b1e469683d0dce1b9fdbeaccd7",
   "copyEngine": true
 }
 
@@ -244,8 +245,8 @@ const fs = require('fs')
 config.dirname = __dirname
 if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
   const alternativePaths = [
+    "../src/generated",
     "src/generated",
-    "generated",
   ]
   
   const alternativePath = alternativePaths.find((altPath) => {
@@ -274,7 +275,7 @@ Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
-path.join(process.cwd(), "src/generated/libquery_engine-rhel-openssl-3.0.x.so.node")
+path.join(process.cwd(), "../src/generated/libquery_engine-rhel-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "src/generated/schema.prisma")
+path.join(process.cwd(), "../src/generated/schema.prisma")

@@ -20,7 +20,7 @@ class ChatGroupUserController {
       // Group by name (case-insensitive)
       const usersByName = new Map<string, typeof allUsers>();
       
-      allUsers.forEach(user => {
+      allUsers.forEach((user: any) => {
         const normalizedName = user.name.toLowerCase().trim();
         if (!usersByName.has(normalizedName)) {
           usersByName.set(normalizedName, []);
@@ -35,7 +35,7 @@ class ChatGroupUserController {
           // Keep the first user, mark others for deletion
           const [keepUser, ...duplicates] = users;
           console.log(`Found ${duplicates.length} duplicates for user "${name}", keeping ID ${keepUser.id}`);
-          duplicatesToDelete.push(...duplicates.map((u) => u.id));
+          duplicatesToDelete.push(...duplicates.map((u: any) => u.id));
         }
       });
 
@@ -106,7 +106,7 @@ class ChatGroupUserController {
         },
       });
       
-      const existingUser = existingUsers.find(u => 
+      const existingUser = existingUsers.find((u: any) => 
         u.name.toLowerCase().trim() === normalizedName
       );
 

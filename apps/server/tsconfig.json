@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "verbatimModuleSyntax": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "strict": true,
     "skipLibCheck": true,
     "baseUrl": "./",
@@ -13,6 +12,7 @@
       "prisma": ["node_modules/prisma"]
     },
     "outDir": "./dist",
+    "rootDir": "./src",
     "types": [
       "node"
     ],

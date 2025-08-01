@@ -10,7 +10,7 @@ import { Router } from "express";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { setupSocket } from "./socket";
-import { redis } from "./config/redis";
+import redis from "./config/redis";
 import { createAdapter } from "@socket.io/redis-streams-adapter";
 
 const app = express();
@@ -46,6 +46,11 @@ setupSocket(io);
 
 app.use(
   cors({
+    origin: [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      "https://chatbit.nawin.xyz",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

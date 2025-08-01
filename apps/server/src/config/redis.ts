@@ -1,32 +1,20 @@
-import { Redis } from "ioredis";
+import { createClient } from 'redis';
 
-let redis: Redis | null = null;
+const redisUrl = process.env.REDIS_URL || 'redis://default:password@host:port'; // fallback for local dev
 
-if (process.env.REDIS_URL) {
+const redis = createClient({
+  url: redisUrl
+});
+
+redis.on('error', (err: any) => console.log('Redis Client Error', err));
+
+(async () => {
   try {
-    redis = new Redis(process.env.REDIS_URL, {
-      maxRetriesPerRequest: 3,
-      lazyConnect: true,
-    });
-
-    redis.on('error', (error) => {
-      console.warn('⚠️ Redis connection error:', error.message);
-    });
-
-    redis.on('connect', () => {
-      console.log('✅ Redis connected successfully');
-    });
-
-    redis.on('ready', () => {
-      console.log('✅ Redis is ready');
-    });
-
+    await redis.connect();
+    console.log('✅ Redis connected successfully');
   } catch (error) {
-    console.warn('⚠️ Failed to initialize Redis:', error);
-    redis = null;
+    console.warn('⚠️ Redis connection error:', error);
   }
-} else {
-  console.log('ℹ️ No REDIS_URL provided, Redis functionality disabled');
-}
+})();
 
-export { redis };
+export default redis;

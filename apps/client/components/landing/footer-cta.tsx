@@ -39,7 +39,7 @@ export default function FooterCTA() {
             className="text-lg text-muted-foreground mb-12 leading-relaxed"
           >
             Launch the demo now and see how our scalable chat infrastructure 
-            can transform your application's communication capabilities.
+            can transform your applications communication capabilities.
           </motion.p>
 
           {/* Final CTA Button */}
