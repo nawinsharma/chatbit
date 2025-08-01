@@ -64,14 +64,19 @@ app.use(express.json());
 app.use("/api", router);
 
 app.get("/", (_req: Request, res: Response) => {
-  res.status(200).send("OK");
+  res.status(200).json({ 
+    message: "Server is running!",
+    timestamp: new Date().toISOString(),
+    port: port
+  });
 });
 
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ 
     status: "OK", 
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    port: port
   });
 });
 
@@ -96,14 +101,24 @@ console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
 console.log(`🔌 Port: ${port}`);
 console.log(`🌐 Binding to: 0.0.0.0`);
 
-httpServer.listen(port, "0.0.0.0", () => {
-  // await connectKafkaProducer();
+// Ensure the server starts immediately
+const server = httpServer.listen(port, "0.0.0.0", () => {
   console.log(`✅ Server and Socket.IO running on port ${port}`);
   console.log(`🌍 Server is accessible at: http://0.0.0.0:${port}`);
+  console.log(`🔗 Health check available at: http://0.0.0.0:${port}/health`);
 });
 
 // Add error handling for the server
-httpServer.on('error', (error) => {
+server.on('error', (error) => {
   console.error('❌ Server error:', error);
   process.exit(1);
+});
+
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('🛑 Received SIGTERM, shutting down gracefully...');
+  server.close(() => {
+    console.log('✅ Server closed');
+    process.exit(0);
+  });
 });
