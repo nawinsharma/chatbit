@@ -25,11 +25,12 @@ const socketIOConfig: any = {
       "http://localhost:3000",
       "http://127.0.0.1:3000",
       "https://chatbit.nawin.xyz",
+      "https://chat-server-latest.onrender.com",
     ],
   },
 };
 
-// Only use Redis adapter if REDIS_URL is available
+// Only use Redis adapter if REDIS_URL is available and Redis is connected
 if (process.env.REDIS_URL) {
   try {
     socketIOConfig.adapter = createAdapter(redis);
@@ -50,6 +51,7 @@ app.use(
       "http://localhost:3000",
       "http://127.0.0.1:3000",
       "https://chatbit.nawin.xyz",
+      "https://chat-server-latest.onrender.com",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],

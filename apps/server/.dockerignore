@@ -3,4 +3,13 @@ dist
 npm-debug.log
 Dockerfile
 .dockerignore
-.env 
+.env
+.git
+.gitignore
+README.md
+.turbo
+tsconfig.tsbuildinfo
+*.log
+.DS_Store
+coverage
+.nyc_output 
