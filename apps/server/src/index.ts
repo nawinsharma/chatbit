@@ -63,11 +63,14 @@ app.use(express.json());
 
 app.use("/api", router);
 
+// Enhanced health check endpoint for Render - responds immediately
 app.get("/", (_req: Request, res: Response) => {
   res.status(200).json({ 
     message: "Server is running!",
     timestamp: new Date().toISOString(),
-    port: port
+    port: process.env.PORT || "8080",
+    environment: process.env.NODE_ENV || "development",
+    status: "healthy"
   });
 });
 
@@ -76,7 +79,23 @@ app.get("/health", (_req: Request, res: Response) => {
     status: "OK", 
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    port: port
+    port: process.env.PORT || "8080",
+    environment: process.env.NODE_ENV || "development",
+    memory: process.memoryUsage(),
+    pid: process.pid
+  });
+});
+
+// Additional health check endpoint for Render
+app.get("/ping", (_req: Request, res: Response) => {
+  res.status(200).send("pong");
+});
+
+// Simple readiness check
+app.get("/ready", (_req: Request, res: Response) => {
+  res.status(200).json({ 
+    status: "ready",
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -106,6 +125,8 @@ const server = httpServer.listen(port, "0.0.0.0", () => {
   console.log(`✅ Server and Socket.IO running on port ${port}`);
   console.log(`🌍 Server is accessible at: http://0.0.0.0:${port}`);
   console.log(`🔗 Health check available at: http://0.0.0.0:${port}/health`);
+  console.log(`🏓 Ping endpoint available at: http://0.0.0.0:${port}/ping`);
+  console.log(`✅ Ready endpoint available at: http://0.0.0.0:${port}/ready`);
 });
 
 // Add error handling for the server
@@ -121,4 +142,23 @@ process.on('SIGTERM', () => {
     console.log('✅ Server closed');
     process.exit(0);
   });
+});
+
+process.on('SIGINT', () => {
+  console.log('🛑 Received SIGINT, shutting down gracefully...');
+  server.close(() => {
+    console.log('✅ Server closed');
+    process.exit(0);
+  });
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
 });
