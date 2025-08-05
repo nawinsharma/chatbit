@@ -7,43 +7,9 @@ import ChatGroupUserController from "./controllers/ChatGroupUserController";
 import ChatGroupController from "./controllers/ChatGroupController";
 import ChatsController from "./controllers/ChatsController";
 import { Router } from "express";
-import { createServer } from "http";
-import { Server as SocketIOServer } from "socket.io";
-import { setupSocket } from "./socket";
-import redis from "./config/redis";
-import { createAdapter } from "@socket.io/redis-streams-adapter";
 
 const app = express();
 const router = Router();
-
-const httpServer = createServer(app);
-
-// Socket.IO configuration with optional Redis adapter
-const socketIOConfig: any = {
-  cors: {
-    origin: [
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "https://chatbit.nawin.xyz",
-      "https://chat-server-latest.onrender.com",
-    ],
-  },
-};
-
-// Only use Redis adapter if REDIS_URL is available and Redis is connected
-if (process.env.REDIS_URL) {
-  try {
-    socketIOConfig.adapter = createAdapter(redis);
-    console.log("✅ Using Redis adapter for Socket.IO");
-  } catch (error) {
-    console.warn("⚠️ Failed to create Redis adapter, using in-memory adapter:", error);
-  }
-} else {
-  console.log("ℹ️ No REDIS_URL provided, using in-memory adapter for Socket.IO");
-}
-
-const io = new SocketIOServer(httpServer, socketIOConfig);
-setupSocket(io);
 
 app.use(
   cors({
@@ -88,12 +54,10 @@ app.get("/health", (_req: Request, res: Response) => {
   });
 });
 
-// Additional health check endpoint for Render
 app.get("/ping", (_req: Request, res: Response) => {
   res.status(200).send("pong");
 });
 
-// Simple readiness check
 app.get("/ready", (_req: Request, res: Response) => {
   res.status(200).json({ 
     status: "ready",
@@ -117,50 +81,26 @@ router.get("/chats/:groupId", ChatsController.index);
 
 const port = parseInt(process.env.PORT || "8080", 10);
 
-console.log(`🚀 Starting server...`);
+console.log(`🚀 Starting Express server...`);
 console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
 console.log(`🔌 Port: ${port}`);
-console.log(`🌐 Binding to: 0.0.0.0`);
 
-// Ensure the server starts immediately
-const server = httpServer.listen(port, "0.0.0.0", () => {
-  console.log(`✅ Server and Socket.IO running on port ${port}`);
-  console.log(`🌍 Server is accessible at: http://0.0.0.0:${port}`);
-  console.log(`🔗 Health check available at: http://0.0.0.0:${port}/health`);
-  console.log(`🏓 Ping endpoint available at: http://0.0.0.0:${port}/ping`);
-  console.log(`✅ Ready endpoint available at: http://0.0.0.0:${port}/ready`);
-});
-
-// Add error handling for the server
-server.on('error', (error) => {
-  console.error('❌ Server error:', error);
-  process.exit(1);
+// Start Express server directly
+app.listen(port, "localhost", () => {
+  console.log(`✅ Express server running on port ${port}`);
+  console.log(`🌍 Server is accessible at: http://localhost:${port}`);
+  console.log(`🔗 Health check available at: http://localhost:${port}/health`);
+  console.log(`🏓 Ping endpoint available at: http://localhost:${port}/ping`);
+  console.log(`✅ Ready endpoint available at: http://localhost:${port}/ready`);
 });
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
   console.log('🛑 Received SIGTERM, shutting down gracefully...');
-  server.close(() => {
-    console.log('✅ Server closed');
-    process.exit(0);
-  });
+  process.exit(0);
 });
 
 process.on('SIGINT', () => {
   console.log('🛑 Received SIGINT, shutting down gracefully...');
-  server.close(() => {
-    console.log('✅ Server closed');
-    process.exit(0);
-  });
-});
-
-// Handle uncaught exceptions
-process.on('uncaughtException', (error) => {
-  console.error('❌ Uncaught Exception:', error);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
-  process.exit(1);
+  process.exit(0);
 });

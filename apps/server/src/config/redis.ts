@@ -8,13 +8,23 @@ const redis = createClient({
 
 redis.on('error', (err: any) => console.log('Redis Client Error', err));
 
-(async () => {
+// Connect to Redis with timeout
+const connectRedis = async () => {
   try {
-    await redis.connect();
+    await Promise.race([
+      redis.connect(),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Redis connection timeout')), 5000)
+      )
+    ]);
     console.log('✅ Redis connected successfully');
   } catch (error) {
     console.warn('⚠️ Redis connection error:', error);
+    console.log('ℹ️ Continuing without Redis...');
   }
-})();
+};
+
+// Start Redis connection
+connectRedis();
 
 export default redis;
