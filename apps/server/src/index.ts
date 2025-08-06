@@ -10,6 +10,7 @@ import ChatGroupUserController from "./controllers/ChatGroupUserController";
 import ChatGroupController from "./controllers/ChatGroupController";
 import ChatsController from "./controllers/ChatsController";
 import { Router } from "express";
+import { fromNodeHeaders } from "better-auth/node";
 
 const app = express();
 const router = Router();
@@ -51,7 +52,7 @@ app.use(
   })
 );
 
-app.all("/api/auth{/*path}", toNodeHandler(auth));
+app.use("/api/auth", toNodeHandler(auth));
 
 app.use(express.json());
 
@@ -100,6 +101,25 @@ app.get("/debug/auth", (_req: Request, res: Response) => {
     nodeEnv: process.env.NODE_ENV,
     timestamp: new Date().toISOString()
   });
+});
+
+// Test auth endpoint
+app.get("/debug/test-auth", async (req: Request, res: Response) => {
+  try {
+    const session = await auth.api.getSession({
+      headers: fromNodeHeaders(req.headers),
+    });
+    res.status(200).json({
+      session: session,
+      headers: req.headers,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error instanceof Error ? error.message : "Unknown error",
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 // Chat Group Routes
