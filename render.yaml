@@ -16,6 +16,10 @@ services:
         sync: false
       - key: BETTER_AUTH_SECRET
         sync: false
+      - key: BETTER_AUTH_URL
+        value: https://chatbit-server.onrender.com
+      - key: CORS_ORIGIN
+        value: https://chatbit.nawin.xyz
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET

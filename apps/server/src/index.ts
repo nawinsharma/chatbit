@@ -43,9 +43,10 @@ app.use(
       "http://127.0.0.1:3000",
       "https://chatbit.nawin.xyz",
       "https://chat-server-latest.onrender.com",
-    ],
+      process.env.CORS_ORIGIN || "",
+    ].filter(Boolean), // Filter out empty strings
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
     credentials: true,
   })
 );

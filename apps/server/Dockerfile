@@ -6,18 +6,18 @@ RUN apk add --no-cache libc6-compat openssl
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json package-lock.json* ./
+# Copy package files from server directory
+COPY apps/server/package.json apps/server/package-lock.json* ./
 
 # Install dependencies
 RUN npm ci
 
 # Copy Prisma schema and generate client
-COPY prisma ./prisma
+COPY apps/server/prisma ./prisma
 RUN npx prisma generate
 
 # Copy source code
-COPY . .
+COPY apps/server/ .
 
 # Build the application
 RUN npm run build
