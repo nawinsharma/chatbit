@@ -1,9 +1,14 @@
 import { io, Socket } from "socket.io-client";
 
-let socket: Socket;
+let socket: Socket | null = null;
 
-export const getSocket = () => {
-  if (!socket) {
+export const getSocket = (auth?: Record<string, unknown>) => {
+  // If we have auth parameters and no socket exists, or if auth has changed, create a new socket
+  if (!socket || (auth && JSON.stringify(socket.auth) !== JSON.stringify(auth))) {
+    if (socket) {
+      socket.disconnect();
+    }
+    
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
     console.log('Connecting to socket server at:', backendUrl);
     
@@ -18,13 +23,15 @@ export const getSocket = () => {
       transports: ['websocket', 'polling'],
       upgrade: true,
       rememberUpgrade: true,
-      withCredentials: true
+      withCredentials: true,
+      auth: auth || {}
     });
 
     // Add comprehensive event listeners for debugging
     socket.on('connect', () => {
       console.log('✅ Socket connected successfully to', backendUrl);
-      console.log('Socket ID:', socket.id);
+      console.log('Socket ID:', socket?.id);
+      console.log('Socket auth:', socket?.auth);
     });
 
     socket.on('connect_error', (error) => {

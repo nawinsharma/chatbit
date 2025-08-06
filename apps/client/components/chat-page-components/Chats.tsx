@@ -30,10 +30,9 @@ export default function Chats({
   };
 
   const socket = useMemo(() => {
-    const socket = getSocket();
-    socket.auth = {
+    const socket = getSocket({
       room: group.id,
-    };
+    });
     
     // Add connection status tracking
     socket.on("connect", () => {
@@ -51,7 +50,7 @@ export default function Chats({
       setIsConnected(false);
     });
     
-    return socket.connect();
+    return socket;
   }, [group.id]);
 
   useEffect(() => {
@@ -61,13 +60,26 @@ export default function Chats({
       .finally(() => setLoading(false));
   }, [group.id]);
 
+  // Connect to socket when component mounts or group changes
+  useEffect(() => {
+    if (socket && !socket.connected) {
+      console.log("Connecting to socket...");
+      socket.connect();
+    }
+  }, [socket]);
+
   useEffect(() => {
     socket.on("message", (data: MessageType) => {
       console.log("Received message from server:", data);
       
       // Check if this message already exists (to avoid duplicates from optimistic updates)
       setMessages((prevMessages) => {
-        const exists = prevMessages.some(msg => msg.id === data.id);
+        const exists = prevMessages.some(msg => 
+          msg.id === data.id || 
+          (msg.message === data.message && 
+           msg.name === data.name && 
+           Math.abs(new Date(msg.created_at).getTime() - new Date(data.created_at).getTime()) < 5000) // Within 5 seconds
+        );
         if (exists) {
           console.log("Message already exists, skipping duplicate");
           return prevMessages;
@@ -126,6 +138,9 @@ export default function Chats({
       created_at: new Date().toISOString(),
       group_id: group.id,
     };
+    
+    console.log("chatUser when sending message:", chatUser);
+    console.log("Using name:", chatUser?.name ?? "Unknown");
     
     try {
       console.log("Sending message:", payload);

@@ -22,8 +22,10 @@ export default function ChatBase({
   
   useEffect(() => {
     const data = localStorage.getItem(group.id);
+    console.log("Retrieved localStorage data for group", group.id, ":", data);
     if (data) {
       const pData = JSON.parse(data);
+      console.log("Parsed localStorage data:", pData);
       setChatUser(pData);
     }
   }, [group.id]);
@@ -38,12 +40,24 @@ export default function ChatBase({
     }
   }, [group.id]);
 
-  // Refresh users when dialog closes (after successful join)
+  // Function to refresh chat user from localStorage
+  const refreshChatUser = useCallback(() => {
+    const data = localStorage.getItem(group.id);
+    console.log("Refreshing chatUser from localStorage:", data);
+    if (data) {
+      const pData = JSON.parse(data);
+      console.log("Setting chatUser to:", pData);
+      setChatUser(pData);
+    }
+  }, [group.id]);
+
+  // Refresh users and chat user when dialog closes (after successful join)
   useEffect(() => {
     if (!open) {
       refreshUsers();
+      refreshChatUser();
     }
-  }, [open, refreshUsers]);
+  }, [open, refreshUsers, refreshChatUser]);
   
   return (
     <div className="flex h-screen bg-background">
@@ -63,7 +77,15 @@ export default function ChatBase({
         {/* Main chat area */}
         <div className="flex-1 min-h-0 w-full max-w-full flex flex-col">
           {open ? (
-            <ChatUserDialog open={open} setOpen={setOpen} group={group} onUserJoined={refreshUsers} />
+            <ChatUserDialog 
+              open={open} 
+              setOpen={setOpen} 
+              group={group} 
+              onUserJoined={() => {
+                refreshUsers();
+                refreshChatUser();
+              }} 
+            />
           ) : (
             <Chats oldMessages={oldMessages} group={group} chatUser={chatUser} />
           )}

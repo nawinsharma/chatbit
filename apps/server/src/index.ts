@@ -1,8 +1,11 @@
 import "dotenv/config";
 import cors from "cors";
 import express, { type Request, type Response } from "express";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import { auth } from "./lib/auth";
 import { toNodeHandler } from "better-auth/node";
+import { setupSocket } from "./socket";
 import ChatGroupUserController from "./controllers/ChatGroupUserController";
 import ChatGroupController from "./controllers/ChatGroupController";
 import ChatsController from "./controllers/ChatsController";
@@ -10,6 +13,28 @@ import { Router } from "express";
 
 const app = express();
 const router = Router();
+
+// Create HTTP server
+const httpServer = createServer(app);
+
+// Create Socket.IO server
+const io = new Server(httpServer, {
+  cors: {
+    origin: [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      "https://chatbit.nawin.xyz",
+      "https://chat-server-latest.onrender.com",
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  transports: ['websocket', 'polling'],
+  allowEIO3: true
+});
+
+// Setup Socket.IO handlers
+setupSocket(io);
 
 app.use(
   cors({
@@ -81,13 +106,14 @@ router.get("/chats/:groupId", ChatsController.index);
 
 const port = parseInt(process.env.PORT || "8080", 10);
 
-console.log(`🚀 Starting Express server...`);
+console.log(`🚀 Starting Express server with Socket.IO...`);
 console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
 console.log(`🔌 Port: ${port}`);
 
-// Start Express server directly
-app.listen(port, "localhost", () => {
+// Start HTTP server (which includes both Express and Socket.IO)
+httpServer.listen(port, "::", () => {
   console.log(`✅ Express server running on port ${port}`);
+  console.log(`🔌 Socket.IO server running on port ${port}`);
   console.log(`🌍 Server is accessible at: http://localhost:${port}`);
   console.log(`🔗 Health check available at: http://localhost:${port}/health`);
   console.log(`🏓 Ping endpoint available at: http://localhost:${port}/ping`);
@@ -97,10 +123,16 @@ app.listen(port, "localhost", () => {
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
   console.log('🛑 Received SIGTERM, shutting down gracefully...');
-  process.exit(0);
+  httpServer.close(() => {
+    console.log('✅ HTTP server closed');
+    process.exit(0);
+  });
 });
 
 process.on('SIGINT', () => {
   console.log('🛑 Received SIGINT, shutting down gracefully...');
-  process.exit(0);
+  httpServer.close(() => {
+    console.log('✅ HTTP server closed');
+    process.exit(0);
+  });
 });

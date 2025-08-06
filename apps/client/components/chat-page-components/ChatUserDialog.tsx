@@ -101,17 +101,19 @@ export default function ChatUserDialog({
     setIsSubmitting(true);
     
     try {
-      const localData = localStorage.getItem(params["id"] as string);
-      if (!localData) {
-        const { data } = await axios.post(`${Env.BACKEND_URL}/api/chat-group-user`, {
-          name: state.name.trim(),
-          group_id: params["id"] as string,
-        });
-        localStorage.setItem(
-          params["id"] as string,
-          JSON.stringify(data?.data)
-        );
-      }
+      const { data } = await axios.post(`${Env.BACKEND_URL}/api/chat-group-user`, {
+        name: state.name.trim(),
+        group_id: params["id"] as string,
+      });
+      
+      console.log("API response data:", data);
+      console.log("Storing user data in localStorage:", data?.data);
+      
+      // Always store the latest user data
+      localStorage.setItem(
+        params["id"] as string,
+        JSON.stringify(data?.data)
+      );
       
       toast.success(`Welcome to ${group.title}!`);
       setOpen(false);

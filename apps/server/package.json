@@ -5,9 +5,9 @@
     "schema": "./prisma/schema.prisma"
   },
   "scripts": {
-    "dev": "node --loader=ts-node/esm --env-file=.env --watch src/index.ts",
     "build": "tsc && tsc-alias && prisma generate",
     "start": "node dist/index.js",
+    "dev": "npm run build && node dist/index.js",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:migrate": "prisma migrate dev"
