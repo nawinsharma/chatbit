@@ -9,10 +9,9 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:8080",
   secret: process.env.BETTER_AUTH_SECRET || "KtIGtNKmPS9PjZFnlfFTVzmb6hOyvYUU",
   trustedOrigins: [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000", 
-    "https://chatbit.nawin.xyz",
-    process.env.CORS_ORIGIN || "",
+    process.env.NODE_ENV === "production"
+      ? "https://chatbit.nawin.xyz"
+      : "http://localhost:3000",
   ],
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
