@@ -39,16 +39,10 @@ setupSocket(io);
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "https://chatbit.nawin.xyz",
-      "https://chat-server-latest.onrender.com",
-      process.env.CORS_ORIGIN || "",
-    ].filter(Boolean), // Filter out empty strings
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    origin: ["https://chatbit.nawin.xyz"], // Only your frontend domain, no trailing slash
+    credentials: true, // Allow cookies
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
 
