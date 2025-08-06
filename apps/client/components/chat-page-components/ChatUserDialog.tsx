@@ -63,6 +63,8 @@ export default function ChatUserDialog({
           const { data: responseData } = await axios.post(`${Env.BACKEND_URL}/api/chat-group-user`, {
             name: userName,
             group_id: params["id"] as string,
+          }, {
+            withCredentials: true,
           });
           
           // Store in localStorage
@@ -104,6 +106,8 @@ export default function ChatUserDialog({
       const { data } = await axios.post(`${Env.BACKEND_URL}/api/chat-group-user`, {
         name: state.name.trim(),
         group_id: params["id"] as string,
+      }, {
+        withCredentials: true,
       });
       
       console.log("API response data:", data);

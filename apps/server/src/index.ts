@@ -91,6 +91,17 @@ app.get("/ready", (_req: Request, res: Response) => {
   });
 });
 
+// Debug endpoint to check auth configuration
+app.get("/debug/auth", (_req: Request, res: Response) => {
+  res.status(200).json({
+    betterAuthUrl: process.env.BETTER_AUTH_URL,
+    betterAuthSecret: process.env.BETTER_AUTH_SECRET ? "SET" : "NOT SET",
+    corsOrigin: process.env.CORS_ORIGIN,
+    nodeEnv: process.env.NODE_ENV,
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Chat Group Routes
 router.get("/chat-group", ChatGroupController.index);
 router.get("/chat-group/:id", ChatGroupController.show);

@@ -6,11 +6,13 @@ import { fromNodeHeaders } from "better-auth/node";
 class ChatGroupController {
   static async index(req: Request, res: Response) {
     try {
+      console.log("Headers received:", req.headers);
       const session = await auth.api.getSession({
         headers: fromNodeHeaders(req.headers),
       });
-      console.log(session);
+      console.log("Session retrieved:", session);
       const user = session?.user;
+      console.log("User from session:", user);
       const groups = await prisma.chatGroup.findMany({
         where: {
           user_id: user?.id,
@@ -21,6 +23,7 @@ class ChatGroupController {
       });
       return res.json({ data: groups });
     } catch (error) {
+      console.error("Error in ChatGroupController.index:", error);
       return res
         .status(500)
         .json({ message: "Something went wrong.please try again!" });
@@ -50,10 +53,13 @@ class ChatGroupController {
   static async store(req: Request, res: Response) {
     try {
       const body = req.body;
+      console.log("Store request headers:", req.headers);
       const session = await auth.api.getSession({
         headers: fromNodeHeaders(req.headers),
       });
+      console.log("Store session retrieved:", session);
       const user = session?.user;
+      console.log("Store user from session:", user);
       if (!user || !user.id) {
         return res.status(401).json({ message: "Unauthorized: No valid user session found." });
       }
