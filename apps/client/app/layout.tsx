@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
-import { TwentyFirstToolbar } from '@21st-extension/toolbar-next';
-import { ReactPlugin } from '@21st-extension/react';
 import { cn } from "@/lib/utils";
 import { aeonik, inter } from "@/utils/constants/fonts";
 import ConditionalFooter from "@/components/conditional-footer";
@@ -65,7 +63,6 @@ export default function RootLayout({
           inter.variable,
         )}
       >
-        <TwentyFirstToolbar config={{ plugins: [ReactPlugin] }} />
         <ThemeProvider
             attribute="class"
             defaultTheme="dark"

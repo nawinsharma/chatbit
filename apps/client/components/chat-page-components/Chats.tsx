@@ -8,6 +8,7 @@ import { fetchChats } from "@/fetch/chatsFetch";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { SendIcon, LoaderIcon } from "lucide-react";
+import { EmojiPicker } from "../ui/emoji-picker";
 
 export default function Chats({
   group,
@@ -179,6 +180,10 @@ export default function Chats({
       handleSubmit(e);
     }
   };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleEmojiSelect = (emoji: any) => {
+    setMessage(prev => prev + emoji.native);
+  };
 
   const groupMessagesByDate = (messages: MessageType[]) => {
     const grouped: { [key: string]: MessageType[] } = {};
@@ -267,11 +272,11 @@ export default function Chats({
                       >
                         {/* Avatar */}
                         <div className={`${showAvatar ? "opacity-100" : "opacity-0"} transition-opacity`}>
-                          <Avatar className="h-8 w-8 ring-2 ring-border">
-                            <AvatarFallback className={`text-xs font-semibold ${
+                          <Avatar className="h-10 w-10 ring-2 ring-gray-200 dark:ring-gray-600">
+                            <AvatarFallback className={`text-sm font-semibold ${
                               isOwn 
-                                ? "bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white" 
-                                : "bg-muted text-foreground"
+                                ? "bg-blue-500 text-white" 
+                                : "bg-gray-200 text-gray-700 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-600"
                             }`}>
                               {msg.name ? msg.name.charAt(0).toUpperCase() : '?'}
                             </AvatarFallback>
@@ -281,7 +286,7 @@ export default function Chats({
                         {/* Message bubble */}
                         <div className={`max-w-xs lg:max-w-md xl:max-w-lg ${isOwn ? "text-right" : ""}`}>
                           {showAvatar && !isOwn && (
-                            <div className="text-xs font-medium text-muted-foreground mb-1 px-1">
+                            <div className="text-xs font-medium text-gray-600 mb-1 px-1">
                               {msg.name}
                             </div>
                           )}
@@ -289,15 +294,15 @@ export default function Chats({
                           <div
                             className={`rounded-2xl px-4 py-3 shadow-sm transition-all duration-200 ${
                               isOwn
-                                ? "bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white"
-                                : "bg-card border border-border text-card-foreground hover:bg-muted/50"
+                                ? "bg-blue-500 text-white"
+                                : "bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-600"
                             }`}
                           >
                             <div className="break-words whitespace-pre-wrap text-sm leading-relaxed">
                               {msg.message}
                             </div>
                             <div className={`text-[10px] mt-1 ${
-                              isOwn ? "text-white/70" : "text-muted-foreground"
+                              isOwn ? "text-white/70" : "text-gray-500"
                             }`}>
                               {new Date(msg.created_at).toLocaleTimeString([], { 
                                 hour: '2-digit', 
@@ -330,13 +335,13 @@ export default function Chats({
         )}
         
         <form onSubmit={handleSubmit} className="flex items-end gap-3">
-          <div className="flex-1">
+          <div className="flex-1 relative">
             <textarea
               placeholder="Type a message..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyPress}
-              className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500/50 transition-all duration-200"
+              className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 pr-16 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500/50 transition-all duration-200"
               rows={1}
               style={{
                 minHeight: '44px',
@@ -349,12 +354,19 @@ export default function Chats({
                 target.style.height = target.scrollHeight + 'px';
               }}
             />
+            <div className="absolute right-3 bottom-3">
+              <EmojiPicker 
+                onEmojiSelect={handleEmojiSelect}
+                className="z-10"
+                buttonClassName="h-10 w-10 p-0 hover:bg-muted/50 transition-colors bg-muted/30 hover:bg-muted/60 rounded-lg"
+              />
+            </div>
           </div>
           <Button
             type="submit"
             size="sm"
             disabled={!message.trim() || isSending || !isConnected}
-            className="h-11 w-11 shrink-0 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white border-none shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="h-11 w-11 shrink-0 rounded-xl bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white border-none shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             title={!isConnected ? "Connecting..." : isSending ? "Sending..." : "Send message"}
           >
             {isSending ? (

@@ -46,7 +46,7 @@ const HomePage = () => {
 						</button>
 						<h1 className="!leading-[1.15] w-full text-balance py-6 text-center font-heading font-medium text-4xl text-foreground tracking-normal sm:text-5xl md:text-6xl lg:text-7xl">
 							Next-Gen Scalable{" "}
-							<span className="inline-block bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
+							<span className="inline-block text-blue-600 dark:text-blue-400">
 								Real Time Group Chat Platform
 							</span>
 						</h1>
@@ -62,14 +62,12 @@ const HomePage = () => {
 								href={user ? "/dashboard" : "/sign-in"}
 								className="flex items-center text-white"
 							>
-								<CoolMode>
 									<ShimmerButton>
 										<span className="flex items-center text-white">
 											Start chatting for free
 											<ArrowRightIcon className="ml-2 h-4 w-4" />
 										</span>
 									</ShimmerButton>
-								</CoolMode>
 							</Link>
 						</div>
 					</AnimationContainer>
@@ -298,7 +296,7 @@ const HomePage = () => {
 				<AnimationContainer delay={0.1}>
 					<LampContainer>
 						<div className="relative flex w-full flex-col items-center justify-center text-center">
-							<h2 className="!leading-[1.15] mt-8 bg-gradient-to-b from-foreground/90 to-muted-foreground bg-clip-text py-4 text-center font-heading font-medium text-4xl text-transparent tracking-tight md:text-7xl">
+							<h2 className="!leading-[1.15] mt-8 text-blue-600 dark:text-blue-400 py-4 text-center font-heading font-medium text-4xl tracking-tight md:text-7xl">
 								Ready to Transform <br />
 								Your Team Communication?
 							</h2>

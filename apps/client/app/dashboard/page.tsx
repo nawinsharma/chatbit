@@ -8,13 +8,13 @@ import { GroupChatType } from "@/type";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { AnimationContainer, MaxWidthWrapper } from "@/components/global";
-import MagicBadge from "@/components/ui/magic-badge";
 import { MessageSquareIcon } from "lucide-react";
 
 export default function Dashboard() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
   const [groups, setGroups] = useState<GroupChatType[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isRefreshing, setIsRefreshing] = useState(false);
   const isRefreshingRef = useRef(false);
 
@@ -76,7 +76,7 @@ export default function Dashboard() {
               {/* <MagicBadge title="Dashboard" /> */}
               <h1 className="!leading-[1.15] text-balance font-heading font-medium text-4xl text-foreground tracking-normal sm:text-5xl md:text-6xl">
                 Welcome back, {" "}
-                <span className="inline-block bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
+                <span className="inline-block text-blue-600 dark:text-blue-400">
                   {session?.user.name}
                 </span>
               </h1>

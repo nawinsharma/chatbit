@@ -61,7 +61,7 @@ export default function ChatNav({
             </span>
           </div>
           <Avatar className="h-9 w-9 ring-2 ring-border">
-            <AvatarFallback className="bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white font-semibold">
+            <AvatarFallback className="bg-blue-600 dark:bg-blue-500 text-white font-semibold">
               {user.name ? user.name.charAt(0).toUpperCase() : '?'}
             </AvatarFallback>
           </Avatar>

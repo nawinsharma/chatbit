@@ -67,7 +67,7 @@ export default function DemoSection() {
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
           >
             Ready to{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-blue-600 dark:text-blue-400">
               Transform
             </span>{" "}
             Your Communication?

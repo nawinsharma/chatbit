@@ -27,7 +27,7 @@ export default function MobileChatSidebar({
         {/* Header */}
         <div className="border-b border-border p-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-sm">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 dark:bg-blue-500 text-white shadow-sm">
               <UsersIcon className="h-5 w-5" />
             </div>
             <div>
@@ -55,7 +55,7 @@ export default function MobileChatSidebar({
                 {/* Avatar */}
                 <div className="relative">
                   <Avatar className="h-10 w-10 ring-2 ring-border group-hover:ring-violet-500/20 transition-all duration-200">
-                    <AvatarFallback className="bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white font-semibold">
+                    <AvatarFallback className="bg-blue-600 dark:bg-blue-500 text-white font-semibold">
                       {user.name ? user.name.charAt(0).toUpperCase() : '?'}
                     </AvatarFallback>
                   </Avatar>

@@ -27,7 +27,7 @@ export default function FooterCTA() {
             className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6"
           >
             Experience real-time chat{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-blue-600 dark:text-blue-400">
               redefined
             </span>
           </motion.h2>

@@ -68,7 +68,7 @@ export default function FeaturesSection() {
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
             Why Choose Our{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-blue-600 dark:text-blue-400">
               Scalable Chat App?
             </span>
           </h2>

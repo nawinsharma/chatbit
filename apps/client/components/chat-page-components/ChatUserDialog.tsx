@@ -162,7 +162,7 @@ export default function ChatUserDialog({
       >
         <DialogHeader className="text-center">
           <div className="flex flex-col items-center gap-4 mb-2">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-lg">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 dark:bg-blue-500 text-white shadow-lg">
               <MessageSquareIcon className="h-8 w-8" />
             </div>
             <div className="space-y-2">
@@ -210,7 +210,7 @@ export default function ChatUserDialog({
           
           <Button
             type="submit"
-            className="w-full h-11 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white border-none shadow-lg hover:shadow-xl transition-all duration-300"
+            className="w-full h-11 bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white border-none shadow-lg hover:shadow-xl transition-all duration-300"
             disabled={isSubmitting || !state.name.trim() || !state.passcode.trim()}
           >
             {isSubmitting ? (

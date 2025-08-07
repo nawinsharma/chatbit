@@ -86,7 +86,7 @@ export default function HeroSection() {
             className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
           >
             Build Scalable,{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-blue-600 dark:text-blue-400">
               Real-Time Chat
             </span>{" "}
             Experiences
