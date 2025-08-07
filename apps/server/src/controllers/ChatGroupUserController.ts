@@ -113,7 +113,7 @@ class ChatGroupUserController {
       if (existingUser) {
         console.log("User already exists in group, returning existing entry:", existingUser);
         return res.json({
-          message: "Welcome back!",
+          message: "Welcome!",
           data: existingUser,
         });
       }
