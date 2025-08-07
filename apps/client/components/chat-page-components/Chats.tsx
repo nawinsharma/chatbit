@@ -276,7 +276,7 @@ export default function Chats({
                             <AvatarFallback className={`text-sm font-semibold ${
                               isOwn 
                                 ? "bg-blue-500 text-white" 
-                                : "bg-gray-200 text-gray-700 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-600"
+                                : "bg-gray-200 text-gray-700 dark:text-gray-300 dark:bg-[rgb(14,14,14)] dark:border-[rgb(14,14,14)]"
                             }`}>
                               {msg.name ? msg.name.charAt(0).toUpperCase() : '?'}
                             </AvatarFallback>
@@ -286,7 +286,7 @@ export default function Chats({
                         {/* Message bubble */}
                         <div className={`max-w-xs lg:max-w-md xl:max-w-lg ${isOwn ? "text-right" : ""}`}>
                           {showAvatar && !isOwn && (
-                            <div className="text-xs font-medium text-gray-600 mb-1 px-1">
+                            <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 px-1">
                               {msg.name}
                             </div>
                           )}
@@ -295,7 +295,7 @@ export default function Chats({
                             className={`rounded-2xl px-4 py-3 shadow-sm transition-all duration-200 ${
                               isOwn
                                 ? "bg-blue-500 text-white"
-                                : "bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-600"
+                                : "bg-gray-100 dark:bg-[rgb(14,14,14)] text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-[rgb(14,14,14)]"
                             }`}
                           >
                             <div className="break-words whitespace-pre-wrap text-sm leading-relaxed">
