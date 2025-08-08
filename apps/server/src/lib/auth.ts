@@ -26,10 +26,9 @@ export const auth = betterAuth({
       name: "better-auth.session-token",
       attributes: {
         httpOnly: true,
-        secure: true, // Only secure in prod
-        sameSite: "none",
+        secure: process.env.NODE_ENV === "production", // Only secure in prod
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         path: "/"
-        // Do NOT set domain unless you have a multi-subdomain setup
       }
     }
   },

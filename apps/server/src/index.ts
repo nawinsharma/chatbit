@@ -126,6 +126,51 @@ app.get("/debug/test-auth", async (req: Request, res: Response) => {
   }
 });
 
+// Enhanced debug endpoint for production troubleshooting
+app.get("/debug/auth-details", async (req: Request, res: Response) => {
+  try {
+    const authDetails: {
+      environment: string | undefined;
+      betterAuthUrl: string | undefined;
+      corsOrigin: string | undefined;
+      requestOrigin: string | undefined;
+      requestReferer: string | undefined;
+      cookies: string | undefined;
+      userAgent: string | undefined;
+      timestamp: string;
+      session?: any;
+      sessionError?: string;
+    } = {
+      environment: process.env.NODE_ENV,
+      betterAuthUrl: process.env.BETTER_AUTH_URL,
+      corsOrigin: process.env.CORS_ORIGIN,
+      requestOrigin: req.headers.origin,
+      requestReferer: req.headers.referer,
+      cookies: req.headers.cookie,
+      userAgent: req.headers['user-agent'],
+      timestamp: new Date().toISOString()
+    };
+    
+    // Try to get session
+    try {
+      const session = await auth.api.getSession({
+        headers: fromNodeHeaders(req.headers),
+      });
+      authDetails.session = session;
+    } catch (sessionError) {
+      authDetails.sessionError = sessionError instanceof Error ? sessionError.message : "Unknown session error";
+    }
+    
+    res.status(200).json(authDetails);
+  } catch (error) {
+    console.error("Debug auth details error:", error);
+    res.status(500).json({
+      error: error instanceof Error ? error.message : "Unknown error",
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // Chat Group Routes
 router.get("/chat-group", ChatGroupController.index);
 router.get("/chat-group/:id", ChatGroupController.show);
