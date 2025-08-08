@@ -31,16 +31,6 @@ export const auth = betterAuth({
         path: "/",
         domain: process.env.NODE_ENV === "production" ? ".nawin.xyz" : undefined
       }
-    },
-    sessionData: {
-      name: "better-auth.session-data",
-      attributes: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        path: "/",
-        domain: process.env.NODE_ENV === "production" ? ".nawin.xyz" : undefined
-      }
     }
   },
   emailAndPassword: {
