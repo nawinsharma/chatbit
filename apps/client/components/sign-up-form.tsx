@@ -60,6 +60,23 @@ export default function SignUpForm() {
       });
    }
 
+   async function handleGuestLogin() {
+      await authClient.signIn.email({
+         email: "Guest@gmail.com",
+         password: "Guest@gmail.com",
+      }, {
+         onRequest: () => {
+            toast("Signing in as guest...")
+         },
+         onSuccess: () => {
+            router.push("/dashboard")
+         },
+         onError: (ctx) => {
+            toast.error(ctx.error.message);
+         },
+      });
+   }
+
    return (
       <Card>
          <CardHeader className="text-center">
@@ -129,6 +146,20 @@ export default function SignUpForm() {
                   </Button>
                </form>
             </Form>
+            
+            <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+               <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                  Or
+               </span>
+            </div>
+            
+            <Button 
+               variant="outline" 
+               className="w-full" 
+               onClick={handleGuestLogin}
+            >
+               Continue as Guest
+            </Button>
          </CardContent>
          <CardFooter className="mx-auto">
             <div className="text-center text-sm">
