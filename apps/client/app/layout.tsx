@@ -88,17 +88,17 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
          <head>
           {/* Favicon Implementation - Comprehensive */}
-          <link rel="icon" href="/favicon.ico" sizes="any" />
+          <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
           <link rel="manifest" href="/site.webmanifest" />
 
           {/* Microsoft Tiles */}
-          <meta name="msapplication-TileColor" content="#FF6B6B" />
+          <meta name="msapplication-TileColor" content="#3B82F6" />
           <meta name="msapplication-config" content="/browserconfig.xml" />
 
           {/* Additional SEO Meta Tags */}
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-          <meta name="theme-color" content="#FF6B6B" />
+          <meta name="theme-color" content="#3B82F6" />
           <meta name="color-scheme" content="light dark" />
           <meta property="og:logo" content="Chatbit" />
 
