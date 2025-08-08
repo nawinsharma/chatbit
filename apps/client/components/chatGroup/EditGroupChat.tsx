@@ -54,7 +54,7 @@ export default function EditGroupChat({
   const onSubmit = async (payload: createChatSchemaType) => {
     try {
       setLoading(true);
-      const { data } = await axios.put(`${Env.BACKEND_URL}/api/chat-group/${group.id}`, payload, {
+      const { data } = await axios.put(`/api/chat-group/${group.id}`, payload, {
         headers: {
           Authorization: user.token,
         },

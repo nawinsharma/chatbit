@@ -2,10 +2,12 @@ import Env from "@/lib/env";
 
 export async function fetchChats(groupId: string) {
   console.log(Env.BACKEND_URL);
-  
-  const res = await fetch(`${Env.BACKEND_URL}/api/chats/${groupId}`, {
+  const res = await fetch(`/api/chats/${groupId}`, {
     credentials: 'include',
-    cache: "no-cache",
+    next: {
+      revalidate: 60 * 60,
+      tags: ["chats"],
+    },
   });
 
   if (!res.ok) {

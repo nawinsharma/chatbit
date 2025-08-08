@@ -51,7 +51,7 @@ export default function CreateChat({
       console.log("Environment:", process.env.NODE_ENV);
       
       const { data } = await axios.post(
-        `${Env.BACKEND_URL}/api/chat-group`,
+        `/api/chat-group`,
         payload,
         {
           withCredentials: true,

@@ -1,7 +1,7 @@
 import Env from "@/lib/env";
 
 export async function fetchChatGroups() {
-  const res = await fetch(`${Env.BACKEND_URL}/api/chat-group`, {
+  const res = await fetch(`/api/chat-group`, {
     credentials: 'include',
     next: {
       revalidate: 60 * 60,
@@ -21,12 +21,16 @@ export async function fetchChatGroups() {
 }
 
 export async function fetchChatGroup(id: string) {
-  const res = await fetch(`${Env.BACKEND_URL}/api/chat-group/${id}`, {
+  const res = await fetch(`/api/chat-group/${id}`, {
     credentials: 'include',
-    cache: "no-cache",
+    next: {
+      revalidate: 60 * 60,
+      tags: ["dashboard"],
+    },
   });
 
   if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
     throw new Error("Failed to fetch data");
   }
   const response = await res.json();
@@ -37,9 +41,12 @@ export async function fetchChatGroup(id: string) {
 }
 
 export async function fetchChatGroupUsers(id: string) {
-  const res = await fetch(`${Env.BACKEND_URL}/api/chat-group-user?group_id=${id}`, {
+  const res = await fetch(`/api/chat-group-user?group_id=${id}`, {
     credentials: 'include',
-    cache: "no-cache",
+    next: {
+      revalidate: 60 * 60,
+      tags: ["chats"],
+    },
   });
 
   if (!res.ok) {

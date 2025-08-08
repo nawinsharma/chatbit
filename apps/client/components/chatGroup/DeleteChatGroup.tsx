@@ -31,10 +31,7 @@ export default function DeleteChatGroup({
   const deleteChatGroup = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.delete(`${Env.BACKEND_URL}/api/chat-group/${groupId}`, {
-        headers: {
-          Authorization: token,
-        },
+      const { data } = await axios.delete(`/api/chat-group/${groupId}`, {
         withCredentials: true,
       });
       if (data?.message) {

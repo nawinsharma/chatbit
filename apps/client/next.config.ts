@@ -3,12 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
-      // Basic redirect
+      // Proxy all API routes to backend
       {
-        source: '/api/auth/:path*',
+        source: '/api/:path*',
         destination: process.env.NODE_ENV === "production" 
-          ? 'https://chatbit-server.onrender.com/api/auth/:path*'
-          : 'http://localhost:8080/api/auth/:path*',
+          ? 'https://chatbit-server.onrender.com/api/:path*'
+          : 'http://localhost:8080/api/:path*',
         basePath: false,
       }
     ]

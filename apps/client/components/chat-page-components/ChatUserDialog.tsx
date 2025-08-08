@@ -61,7 +61,7 @@ export default function ChatUserDialog({
         
         try {
           // Create/update the user entry for this room
-          const { data: responseData } = await axios.post(`${Env.BACKEND_URL}/api/chat-group-user`, {
+          const { data: responseData } = await axios.post(`/api/chat-group-user`, {
             name: userName,
             group_id: params["id"] as string,
           }, {
@@ -83,7 +83,7 @@ export default function ChatUserDialog({
             console.log("User already exists in group, retrieving existing data");
             try {
               // Try to get the existing user data
-              const { data: usersData } = await axios.get(`${Env.BACKEND_URL}/api/chat-group-user?group_id=${params["id"] as string}`, {
+              const { data: usersData } = await axios.get(`/api/chat-group-user?group_id=${params["id"] as string}`, {
                 withCredentials: true,
               });
               
@@ -138,7 +138,7 @@ export default function ChatUserDialog({
     setIsSubmitting(true);
     
     try {
-      const { data } = await axios.post(`${Env.BACKEND_URL}/api/chat-group-user`, {
+      const { data } = await axios.post(`/api/chat-group-user`, {
         name: state.name.trim(),
         group_id: params["id"] as string,
       }, {
