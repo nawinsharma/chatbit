@@ -22,6 +22,7 @@ export async function fetchChatGroups() {
 
 export async function fetchChatGroup(id: string) {
   const res = await fetch(`${Env.BACKEND_URL}/api/chat-group/${id}`, {
+    credentials: 'include',
     cache: "no-cache",
   });
 
@@ -37,6 +38,7 @@ export async function fetchChatGroup(id: string) {
 
 export async function fetchChatGroupUsers(id: string) {
   const res = await fetch(`${Env.BACKEND_URL}/api/chat-group-user?group_id=${id}`, {
+    credentials: 'include',
     cache: "no-cache",
   });
 

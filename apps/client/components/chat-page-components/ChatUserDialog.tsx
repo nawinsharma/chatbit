@@ -74,7 +74,7 @@ export default function ChatUserDialog({
             JSON.stringify(responseData?.data)
           );
           
-          toast.success(`Welcome back to ${group.title}!`);
+          toast.success(`Welcome to ${group.title}!`);
           setOpen(false);
           onUserJoined?.(); // Notify parent that user joined
         } catch (error: unknown) {
@@ -99,7 +99,7 @@ export default function ChatUserDialog({
                   JSON.stringify(existingUser)
                 );
                 
-                toast.success(`Welcome back to ${group.title}!`);
+                toast.success(`Welcome to ${group.title}!`);
                 setOpen(false);
                 onUserJoined?.(); // Notify parent that user joined
               } else {

@@ -75,7 +75,7 @@ export default function Dashboard() {
             <div className="text-center space-y-4">
               {/* <MagicBadge title="Dashboard" /> */}
               <h1 className="!leading-[1.15] text-balance font-heading font-medium text-4xl text-foreground tracking-normal sm:text-5xl md:text-6xl">
-                Welcome back, {" "}
+                Welcome, {" "}
                 <span className="inline-block text-blue-600 dark:text-blue-400">
                   {session?.user.name}
                 </span>
