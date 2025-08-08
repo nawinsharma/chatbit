@@ -103,7 +103,7 @@ export function Nav() {
                     <SignOutForm>
                       <DropdownMenuItem asChild>
                         <button 
-                          className="flex items-center gap-2 w-full text-left text-white hover:text-gray-300 hover:bg-muted/50"
+                          className="flex items-center gap-2 w-full text-left text-black dark:text-white hover:text-gray-300 dark:hover:text-gray-600 hover:bg-muted/50"
                         >
                           <LogOutIcon className="h-4 w-4" />
                           Sign Out
@@ -184,7 +184,7 @@ export function Nav() {
                       <Button
                         className="flex items-center gap-3 px-4 py-3 text-sm sm:text-base text-white hover:text-gray-200 bg-red-600 hover:bg-red-700 transition-colors rounded-lg w-full justify-start"
                       >
-                          <LogOutIcon className="h-4 w-4 text-white" />
+                          <LogOutIcon className="h-4 w-4 text-black dark:text-white" />
                         <span className="group-hover:translate-x-1 transition-transform duration-200 font-semibold">
                           Sign Out
                         </span>
