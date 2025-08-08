@@ -57,7 +57,6 @@ export default function GroupChatCardMenu({
           open={deleteDialog}
           setOpen={setDeleteDialog}
           groupId={group.id}
-          token={user.token!}
           onSuccess={onDelete}
         />
       )}

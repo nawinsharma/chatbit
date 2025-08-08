@@ -32,14 +32,14 @@ export function setupSocket(io: Server) {
     // * Join the room
     if (socket.room) {
       socket.join(socket.room);
-      console.log(`🏠 Socket ${socket.id} joined room ${socket.room}`);
+      console.log(`Socket ${socket.id} joined room ${socket.room}`);
       
       // Emit a confirmation to the client
       socket.emit('joined_room', { room: socket.room, socketId: socket.id });
     }
 
     socket.on("message", async (data) => {
-      console.log("📨 Received message:", data);
+      console.log("Received message:", data);
       
       // Stop typing indicator when message is sent
       if (socket.room) {
@@ -111,7 +111,7 @@ export function setupSocket(io: Server) {
         
         // Broadcast to all users in the room (except sender)
         socket.to(socket.room).emit("typing_stop", data);
-        console.log(`📤 Typing stop emitted to room ${socket.room}`);
+        console.log(` Typing stop emitted to room ${socket.room}`);
       }
     });
 
@@ -146,12 +146,12 @@ export function setupSocket(io: Server) {
       // Emit to all users in the room
       if (socket.room) {
         io.to(socket.room).emit("user_left", data);
-        console.log(`📤 User left event emitted to room ${socket.room}`);
+        console.log(`User left event emitted to room ${socket.room}`);
       }
     });
 
     socket.on("error", (error) => {
-      console.error(`🚨 Socket error for ${socket.id}:`, error);
+      console.error(`Socket error for ${socket.id}:`, error);
     });
 
     socket.on("disconnect", (reason, details) => {
