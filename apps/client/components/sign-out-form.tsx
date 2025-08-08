@@ -9,7 +9,7 @@ export default function SignOutForm(
 ) {
    const handleSignOut = async () => {
       await authClient.signOut();
-      redirect("/")
+      redirect("/sign-in")
    }
 
    return (
