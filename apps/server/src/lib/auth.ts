@@ -28,7 +28,8 @@ export const auth = betterAuth({
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // Only secure in prod
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        path: "/"
+        path: "/",
+        domain: process.env.NODE_ENV === "production" ? ".nawin.xyz" : undefined
       }
     }
   },

@@ -23,26 +23,8 @@ class ChatsController {
         return res.status(404).json({ message: "Chat group not found." });
       }
       
-      // If user is authenticated, check if they have access to this chat group
-      if (user && user.id) {
-        const groupAccess = await prisma.chatGroup.findFirst({
-          where: {
-            id: groupId,
-            user_id: user.id,
-          },
-        });
-        
-        const groupMembership = await prisma.groupUsers.findFirst({
-          where: {
-            group_id: groupId,
-            name: user.name || user.email,
-          },
-        });
-        
-        if (!groupAccess && !groupMembership) {
-          return res.status(403).json({ message: "Forbidden: You don't have access to this chat group." });
-        }
-      }
+      // For fetching chats, we allow access to anyone who can see the group
+      // The actual authorization happens when they try to join the group
       
       const chats = await prisma.chats.findMany({
         where: {

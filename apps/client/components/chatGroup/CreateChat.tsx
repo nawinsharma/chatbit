@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { clearCache } from "@/actions/revalidateCache";
 import Env from "@/lib/env";
 import { ShimmerButton } from "../magicui/shimmer-button";
+import { authClient } from "@/lib/auth-client";
 
 export default function CreateChat({
   onSuccess,
@@ -40,11 +41,23 @@ export default function CreateChat({
   const onSubmit = async (payload: createChatSchemaType) => {
     try {
       setLoading(true);
+      
+      // Debug: Check current session
+      const { data: session } = await authClient.getSession();
+      console.log("Current session:", session);
+      
+      console.log("Creating chat group with payload:", payload);
+      console.log("Backend URL:", Env.BACKEND_URL);
+      console.log("Environment:", process.env.NODE_ENV);
+      
       const { data } = await axios.post(
         `${Env.BACKEND_URL}/api/chat-group`,
         payload,
         {
           withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          }
         }
       );
 
@@ -61,8 +74,16 @@ export default function CreateChat({
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      console.error("Error creating chat group:", error);
+      
       if (error instanceof AxiosError) {
-        toast.error(error.message);
+        console.error("Axios error details:", {
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+          data: error.response?.data,
+          headers: error.response?.headers,
+        });
+        toast.error(error.response?.data?.message || error.message);
       } else {
         toast.error("Something went wrong. Please try again!");
       }

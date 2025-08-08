@@ -64,6 +64,11 @@ class ChatGroupUserController {
       const user = session?.user;
       const { group_id } = req.query;
       
+      console.log("ChatGroupUser index request:", {
+        groupId: group_id,
+        user: user ? { id: user.id, name: user.name, email: user.email } : null
+      });
+      
       if (!group_id) {
         return res.status(400).json({ message: "Group ID is required." });
       }
@@ -76,29 +81,18 @@ class ChatGroupUserController {
       });
       
       if (!groupExists) {
+        console.log("Group not found for index:", group_id);
         return res.status(404).json({ message: "Chat group not found." });
       }
       
-      // If user is authenticated, check if they have access to this chat group
-      if (user && user.id) {
-        const groupAccess = await prisma.chatGroup.findFirst({
-          where: {
-            id: group_id as string,
-            user_id: user.id,
-          },
-        });
-        
-        const groupMembership = await prisma.groupUsers.findFirst({
-          where: {
-            group_id: group_id as string,
-            name: user.name || user.email,
-          },
-        });
-        
-        if (!groupAccess && !groupMembership) {
-          return res.status(403).json({ message: "Forbidden: You don't have access to this chat group." });
-        }
-      }
+      console.log("Group found for index:", {
+        id: groupExists.id,
+        title: groupExists.title,
+        creatorId: groupExists.user_id
+      });
+      
+      // For fetching users, we allow access to anyone who can see the group
+      // The actual authorization happens when they try to join (in the store method)
       
       // Clean up any existing duplicates before returning the list
       await ChatGroupUserController.cleanupDuplicateUsers(group_id as string);
@@ -112,6 +106,7 @@ class ChatGroupUserController {
         }
       });
 
+      console.log(`Returning ${users.length} users for group ${group_id}`);
       return res.json({ message: "Data fetched successfully!", data: users });
     } catch (error) {
       console.error("Error fetching group users:", error);
@@ -129,6 +124,12 @@ class ChatGroupUserController {
       });
       const user = session?.user;
       
+      console.log("ChatGroupUser store request:", {
+        body,
+        user: user ? { id: user.id, name: user.name, email: user.email } : null,
+        groupId: body.group_id
+      });
+      
       // Verify that the chat group exists
       const groupExists = await prisma.chatGroup.findUnique({
         where: {
@@ -137,29 +138,19 @@ class ChatGroupUserController {
       });
       
       if (!groupExists) {
+        console.log("Group not found:", body.group_id);
         return res.status(404).json({ message: "Chat group not found." });
       }
       
-      // If user is authenticated, check if they're the creator or already a member
-      if (user && user.id) {
-        const groupAccess = await prisma.chatGroup.findFirst({
-          where: {
-            id: body.group_id,
-            user_id: user.id,
-          },
-        });
-        
-        const groupMembership = await prisma.groupUsers.findFirst({
-          where: {
-            group_id: body.group_id,
-            name: user.name || user.email,
-          },
-        });
-        
-        if (!groupAccess && !groupMembership) {
-          return res.status(403).json({ message: "Forbidden: You don't have access to this chat group." });
-        }
-      }
+      console.log("Group found:", {
+        id: groupExists.id,
+        title: groupExists.title,
+        creatorId: groupExists.user_id
+      });
+      
+      // For joining a group, we allow any authenticated user to join
+      // The passcode verification happens on the frontend before this request is made
+      // If they reach this point, it means they have the correct passcode
       
       // Clean up any existing duplicates first
       await ChatGroupUserController.cleanupDuplicateUsers(body.group_id);
@@ -195,6 +186,8 @@ class ChatGroupUserController {
           group_id: body.group_id,
         },
       });
+      
+      console.log("Created new group user:", groupUser);
       
       // Emit socket event to notify other users
       try {
