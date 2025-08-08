@@ -1,4 +1,4 @@
-# 🚀 Chatbit - Next-Gen Scalable Real-Time Group Chat Platform
+# 🚀 Chatbit - Scalable Real Time Group Chat Platform 
 
 <div align="center">
 
@@ -14,6 +14,7 @@
 **Connect instantly, scale infinitely. Build powerful group conversations with enterprise-grade architecture.**
 
 [Live Demo](https://chatbit.nawin.xyz) • [Documentation](https://github.com/nawinsharma/chatbit) • [Report Bug](https://github.com/nawinsharma/scalable-chatapp/issues)
+• [Video](https://ik.imagekit.io/3phdnlhoo3/compressed-video.mp4?updatedAt=1754672676873)
 
 </div>
 
