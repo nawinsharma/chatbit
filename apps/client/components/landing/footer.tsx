@@ -28,7 +28,7 @@ const Footer = () => {
 						</span>
 						<div className="flex items-center gap-1 pt-2 text-muted-foreground">
 							<Link
-								href="https://github.com/nawinsharma"
+								href="https://github.com/nawinsharma/chatbit"
 								target="_blank"
 								className="transition-colors duration-200 hover:text-foreground"
 							>

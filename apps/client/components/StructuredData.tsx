@@ -27,7 +27,7 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
           },
           "sameAs": [
             "https://x.com/nawinscript",
-            "https://github.com/nawinsharma"
+            "https://github.com/nawinsharma/chatbit"
           ]
         };
         
@@ -67,7 +67,7 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
           "logo": `${baseUrl}/favicon.png`,
           "sameAs": [
             "https://x.com/nawinscript",
-            "https://github.com/nawinsharma"
+            "https://github.com/nawinsharma/chatbit"
           ],
           "contactPoint": {
             "@type": "ContactPoint",

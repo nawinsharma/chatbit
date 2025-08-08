@@ -76,7 +76,7 @@ const HomePage = () => {
 				>
 					<AnimationContainer className="flex w-full flex-col items-center justify-center text-center">
 						<Link
-							href="https://github.com/nawinsharma"
+							href="https://github.com/nawinsharma/chatbit"
 							target="_blank"
 							className="group mt-5 relative grid overflow-hidden rounded-full px-4 py-1 shadow-[0_1000px_0_0_hsl(var(--muted))_inset] transition-colors duration-200 cursor-pointer"
 						>

@@ -13,7 +13,7 @@
 
 **Connect instantly, scale infinitely. Build powerful group conversations with enterprise-grade architecture.**
 
-[Live Demo](https://chatbit.nawin.xyz) • [Documentation](https://github.com/nawinsharma/scalable-chatapp) • [Report Bug](https://github.com/nawinsharma/scalable-chatapp/issues)
+[Live Demo](https://chatbit.nawin.xyz) • [Documentation](https://github.com/nawinsharma/chatbit) • [Report Bug](https://github.com/nawinsharma/scalable-chatapp/issues)
 
 </div>
 
