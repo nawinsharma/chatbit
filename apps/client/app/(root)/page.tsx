@@ -16,14 +16,56 @@ import { LampContainer } from "@/components/ui/lamp";
 import MagicBadge from "@/components/ui/magic-badge";
 import MagicCard from "@/components/ui/magic-card";
 import { authClient } from "@/lib/auth-client";
-import { COMPANIES, PROCESS, REVIEWS } from "@/utils/constants/misc"
+import { PROCESS, REVIEWS } from "@/utils/constants/misc"
 import { ArrowRightIcon, StarIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import { useRef, useEffect } from "react";
 
 const HomePage = () => {
 	const { data: session } = authClient.useSession();
 	const user = session?.user;
+	const videoRef = useRef<HTMLVideoElement>(null);
+
+	const handleVideoClick = () => {
+		if (videoRef.current) {
+			if (document.fullscreenElement) {
+				document.exitFullscreen();
+			} else {
+				videoRef.current.requestFullscreen().catch(console.error);
+			}
+		}
+	};
+
+	useEffect(() => {
+		const videoElement = videoRef.current;
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					if (videoElement) {
+						videoElement.play().catch(console.error);
+					}
+				} else {
+					if (videoElement) {
+						videoElement.pause();
+					}
+				}
+			},
+			{
+				threshold: 0.3, // Trigger when 30% of the video is visible
+			}
+		);
+
+		if (videoElement) {
+			observer.observe(videoElement);
+		}
+
+		return () => {
+			if (videoElement) {
+				observer.unobserve(videoElement);
+			}
+		};
+	}, []);
+
 	return (
 		<div className="scrollbar-hide size-full overflow-x-hidden pt-24 bg-gradient-to-b from-background/100 to-background ">
 			{/* Hero Section */}
@@ -33,7 +75,11 @@ const HomePage = () => {
 					className="flex w-full flex-col items-center justify-center bg-gradient-to-b from-background/50 to-background text-center"
 				>
 					<AnimationContainer className="flex w-full flex-col items-center justify-center text-center">
-						<button className="group mt-5 relative grid overflow-hidden rounded-full px-4 py-1 shadow-[0_1000px_0_0_hsl(var(--muted))_inset] transition-colors duration-200">
+						<Link
+							href="https://github.com/nawinsharma"
+							target="_blank"
+							className="group mt-5 relative grid overflow-hidden rounded-full px-4 py-1 shadow-[0_1000px_0_0_hsl(var(--muted))_inset] transition-colors duration-200 cursor-pointer"
+						>
 							<span>
 								<span className="spark mask-gradient absolute inset-0 h-[100%] w-[100%] animate-flip overflow-hidden rounded-full [mask:linear-gradient(white,_transparent_50%)] before:absolute before:aspect-square before:w-[200%] before:rotate-[-90deg] before:animate-rotate before:bg-[conic-gradient(from_0deg,transparent_0_340deg,white_360deg)] before:content-[''] before:[inset:0_auto_auto_50%] before:[translate:-50%_-15%]" />
 							</span>
@@ -43,7 +89,7 @@ const HomePage = () => {
 								🚀 Introducing Chatbit
 								<ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
 							</span>
-						</button>
+						</Link>
 						<h1 className="!leading-[1.15] w-full text-balance py-6 text-center font-heading font-medium text-4xl text-foreground tracking-normal sm:text-5xl md:text-6xl lg:text-7xl">
 							Next-Gen Scalable{" "}
 							<span className="inline-block text-blue-600 dark:text-blue-400">
@@ -79,13 +125,16 @@ const HomePage = () => {
 						<div className="gradient -translate-x-1/2 absolute inset-0 left-1/2 h-1/4 w-3/4 animate-image-glow blur-[5rem] md:top-[10%] md:h-1/3"></div>
 						<div className="-m-2 lg:-m-4 rounded-xl bg-card/50 p-2 ring-1 ring-border backdrop-blur-3xl lg:rounded-2xl">
 							<BorderBeam size={250} duration={12} delay={9} />
-							<Image
-								src="/assets/dashboard-dark.png"
-								alt="Dashboard"
-								width={1500}
-								height={1500}
-								quality={100}
-								className="rounded-md bg-muted/30 ring-1 ring-border lg:rounded-xl"
+							<video
+								ref={videoRef}
+								src="https://ik.imagekit.io/3phdnlhoo3/compressed-video.mp4?updatedAt=1754672676873"
+								className="rounded-md bg-muted/30 ring-1 ring-border lg:rounded-xl w-full h-auto cursor-pointer hover:ring-2 hover:ring-blue-500/50 transition-all duration-200"
+								muted
+								loop
+								playsInline
+								poster="/assets/dashboard-dark.png"
+								onClick={handleVideoClick}
+								title="Click to view fullscreen"
 							/>
 							<div className="-bottom-4 absolute inset-x-0 z-40 h-1/2 w-full bg-gradient-to-t from-background" />
 							<div className="md:-bottom-8 absolute inset-x-0 bottom-0 z-50 h-1/4 w-full bg-gradient-to-t from-background" />
@@ -95,7 +144,7 @@ const HomePage = () => {
 			</MaxWidthWrapper>
 
 			{/* Companies Section */}
-			<MaxWidthWrapper>
+			{/* <MaxWidthWrapper>
 				<AnimationContainer delay={0.4}>
 					<div className="py-14">
 						<div className="mx-auto px-4 md:px-8">
@@ -121,7 +170,7 @@ const HomePage = () => {
 						</div>
 					</div>
 				</AnimationContainer>
-			</MaxWidthWrapper>
+			</MaxWidthWrapper> */}
 
 			{/* Features Section */}
 			<MaxWidthWrapper className="pt-10">

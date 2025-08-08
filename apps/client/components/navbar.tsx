@@ -48,10 +48,6 @@ export function Nav() {
       link: "#features",
     },
     {
-      name: "Pricing",
-      link: "#pricing",
-    },
-    {
       name: "Testimonials",
       link: "#testimonials",
     }

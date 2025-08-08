@@ -61,14 +61,6 @@ const Footer = () => {
 									</li>
 									<li className="mt-2">
 										<Link
-											href="#pricing"
-											className="transition-all duration-300 hover:text-foreground"
-										>
-											Pricing
-										</Link>
-									</li>
-									<li className="mt-2">
-										<Link
 											href="#testimonials"
 											className="transition-all duration-300 hover:text-foreground"
 										>
