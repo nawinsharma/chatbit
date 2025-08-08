@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { SendIcon, LoaderIcon } from "lucide-react";
 import { EmojiPicker } from "../ui/emoji-picker";
+import TypingIndicator from "./TypingIndicator";
+import { useTypingIndicator } from "@/hooks/useTypingIndicator";
 
 export default function Chats({
   group,
@@ -53,6 +55,13 @@ export default function Chats({
     
     return socket;
   }, [group.id]);
+
+  // Initialize typing indicator hook
+  const { typingUsers, startTyping, stopTyping } = useTypingIndicator({
+    roomId: group.id,
+    userName: chatUser?.name,
+    isConnected
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -146,6 +155,9 @@ export default function Chats({
     try {
       console.log("Sending message:", payload);
       
+      // Stop typing indicator when sending message
+      stopTyping();
+      
       // Optimistic update - add immediately for better UX
       setMessages(prevMessages => [...prevMessages, payload]);
       
@@ -180,9 +192,28 @@ export default function Chats({
       handleSubmit(e);
     }
   };
+
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    setMessage(newValue);
+    
+    // Trigger typing indicator
+    if (newValue.trim()) {
+      startTyping();
+    } else {
+      stopTyping();
+    }
+  };
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEmojiSelect = (emoji: any) => {
-    setMessage(prev => prev + emoji.native);
+    const newMessage = message + emoji.native;
+    setMessage(newMessage);
+    
+    // Trigger typing indicator when emoji is added
+    if (newMessage.trim()) {
+      startTyping();
+    }
   };
 
   const groupMessagesByDate = (messages: MessageType[]) => {
@@ -322,6 +353,12 @@ export default function Chats({
         )}
       </div>
 
+      {/* Typing Indicator */}
+      <TypingIndicator 
+        typingUsers={typingUsers} 
+        currentUserName={chatUser?.name} 
+      />
+
       {/* Message Input */}
       <div className="border-t border-border bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/30 p-4">
         {/* Connection Status */}
@@ -339,7 +376,7 @@ export default function Chats({
             <textarea
               placeholder="Type a message..."
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={handleMessageChange}
               onKeyDown={handleKeyPress}
               className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 pr-16 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500/50 transition-all duration-200"
               rows={1}

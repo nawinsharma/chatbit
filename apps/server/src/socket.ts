@@ -6,6 +6,10 @@ interface CustomSocket extends Socket {
   room?: string;
 }
 
+// Track typing users per room with a maximum limit
+const typingUsers = new Map<string, Set<string>>();
+const MAX_TYPING_USERS = 50; // Limit to prevent spam and performance issues
+
 export function setupSocket(io: Server) {
   console.log('Setting up Socket.IO server...');
   
@@ -22,7 +26,7 @@ export function setupSocket(io: Server) {
   });
 
   io.on("connection", (socket: CustomSocket) => {
-    console.log(`✅ User connected: ${socket.id} to room: ${socket.room}`);
+    console.log(`User connected: ${socket.id} to room: ${socket.room}`);
     console.log(`Client address: ${socket.handshake.address}`);
     
     // * Join the room
@@ -37,6 +41,19 @@ export function setupSocket(io: Server) {
     socket.on("message", async (data) => {
       console.log("📨 Received message:", data);
       
+      // Stop typing indicator when message is sent
+      if (socket.room) {
+        const typingSet = typingUsers.get(socket.room);
+        if (typingSet) {
+          typingSet.delete(data.name);
+          if (typingSet.size === 0) {
+            typingUsers.delete(socket.room);
+          }
+          // Broadcast typing stop to all users
+          io.to(socket.room).emit("typing_stop", { name: data.name });
+        }
+      }
+      
       // Save to DB
       try {
         await prisma.chats.create({ data });
@@ -48,7 +65,53 @@ export function setupSocket(io: Server) {
       // Emit to all users in the room (including sender for confirmation)
       if (socket.room) {
         io.to(socket.room).emit("message", data);
-        console.log(`📤 Message emitted to room ${socket.room}`);
+        console.log(`Message emitted to room ${socket.room}`);
+      }
+    });
+
+    // Handle typing start event
+    socket.on("typing_start", (data: { name: string }) => {
+      console.log("User started typing:", data);
+      
+      if (socket.room) {
+        // Add user to typing set for this room
+        if (!typingUsers.has(socket.room)) {
+          typingUsers.set(socket.room, new Set());
+        }
+        
+        const typingSet = typingUsers.get(socket.room)!;
+        
+        // Check if we're at the limit
+        if (typingSet.size >= MAX_TYPING_USERS) {
+          console.log(`⚠️ Typing users limit reached for room ${socket.room} (${MAX_TYPING_USERS})`);
+          return; // Don't add more users to prevent spam
+        }
+        
+        typingSet.add(data.name);
+        
+        // Broadcast to all users in the room (except sender)
+        socket.to(socket.room).emit("typing_start", data);
+        console.log(`Typing start emitted to room ${socket.room} (${typingSet.size} users typing)`);
+      }
+    });
+
+    // Handle typing stop event
+    socket.on("typing_stop", (data: { name: string }) => {
+      console.log("⌨️ User stopped typing:", data);
+      
+      if (socket.room) {
+        // Remove user from typing set for this room
+        const typingSet = typingUsers.get(socket.room);
+        if (typingSet) {
+          typingSet.delete(data.name);
+          if (typingSet.size === 0) {
+            typingUsers.delete(socket.room);
+          }
+        }
+        
+        // Broadcast to all users in the room (except sender)
+        socket.to(socket.room).emit("typing_stop", data);
+        console.log(`📤 Typing stop emitted to room ${socket.room}`);
       }
     });
 
@@ -66,6 +129,19 @@ export function setupSocket(io: Server) {
     // Handle user leave event
     socket.on("user_left", async (data) => {
       console.log("👤 User left:", data);
+      
+      // Remove user from typing indicators if they were typing
+      if (socket.room) {
+        const typingSet = typingUsers.get(socket.room);
+        if (typingSet) {
+          typingSet.delete(data.user.name);
+          if (typingSet.size === 0) {
+            typingUsers.delete(socket.room);
+          }
+          // Broadcast typing stop for this user
+          io.to(socket.room).emit("typing_stop", { name: data.user.name });
+        }
+      }
       
       // Emit to all users in the room
       if (socket.room) {
