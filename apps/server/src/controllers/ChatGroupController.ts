@@ -60,6 +60,10 @@ class ChatGroupController {
     try {
       const body = req.body;
       console.log("Store request headers:", req.headers);
+      console.log("Store request cookies:", req.headers.cookie);
+      console.log("Store request origin:", req.headers.origin);
+      console.log("Store request referer:", req.headers.referer);
+      
       const session = await auth.api.getSession({
         headers: fromNodeHeaders(req.headers),
       });
@@ -67,6 +71,7 @@ class ChatGroupController {
       const user = session?.user;
       console.log("Store user from session:", user);
       if (!user || !user.id) {
+        console.log("No valid user session found - returning 401");
         return res.status(401).json({ message: "Unauthorized: No valid user session found." });
       }
       if (!body?.title || !body?.passcode) {

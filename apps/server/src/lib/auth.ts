@@ -2,6 +2,10 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
 
+// Log the environment for debugging
+console.log("Auth configuration - NODE_ENV:", process.env.NODE_ENV);
+console.log("Auth configuration - BETTER_AUTH_URL:", process.env.BETTER_AUTH_URL);
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql"    
@@ -26,10 +30,9 @@ export const auth = betterAuth({
       name: "better-auth.session-token",
       attributes: {
         httpOnly: true,
-        secure: true, // Only secure in prod
-        sameSite: "none",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         path: "/"
-        // Do NOT set domain unless you have a multi-subdomain setup
       }
     }
   },

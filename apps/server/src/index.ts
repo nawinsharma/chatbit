@@ -103,17 +103,24 @@ app.get("/debug/auth", (_req: Request, res: Response) => {
 // Test auth endpoint
 app.get("/debug/test-auth", async (req: Request, res: Response) => {
   try {
+    console.log("Debug auth request headers:", req.headers);
+    console.log("Debug auth request cookies:", req.headers.cookie);
+    
     const session = await auth.api.getSession({
       headers: fromNodeHeaders(req.headers),
     });
     res.status(200).json({
       session: session,
       headers: req.headers,
+      cookies: req.headers.cookie,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
+    console.error("Debug auth error:", error);
     res.status(500).json({
       error: error instanceof Error ? error.message : "Unknown error",
+      headers: req.headers,
+      cookies: req.headers.cookie,
       timestamp: new Date().toISOString()
     });
   }
