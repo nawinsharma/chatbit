@@ -7,6 +7,7 @@ import { aeonik, inter } from "@/utils/constants/fonts";
 import ConditionalFooter from "@/components/conditional-footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import ConditionalNav from "@/components/conditional-nav";
+import StructuredData from "@/components/StructuredData";
 
 export const metadata: Metadata = {
   title: "Chatbit - Scalable Real-Time Group Chat Platform",
@@ -27,25 +28,54 @@ export const metadata: Metadata = {
     "chatbit",
   ],
   authors: [{ name: "Nawin Kumar Sharma" }],
+  metadataBase: new URL('https://chatbit.nawin.xyz'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: "Chatbit - Scalable Real-Time Group Chat Platform",
-    description: "Experience lightning-fast group messaging that scales to millions of users. Built with Socket.io, Redis, and Kafka for enterprise-grade performance.",
-    type: "website",
-    url: "https://chatbit.nawin.xyz",
+    title: "Chatbit | Real Time Group Chat Platform",
+    description: "A real time group chat platform",
+    url: 'https://chatbit.nawin.xyz',
+    siteName: 'Chatbit',
     images: [
       {
-        url: "/og-image.png",
+        url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: "Chatbit - Scalable Chat Platform",
+        alt: 'og image',
       },
     ],
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Chatbit - Scalable Real-Time Group Chat",
-    description: "Build group conversations that scale to millions with real-time messaging infrastructure.",
-    images: ["/og-image.png"],
+    card: 'summary_large_image',
+    title: "Chatbit | Real Time Group Chat Platform",
+    description: "A real time group chat platform",
+    images: ['/og-image.png'],
+    creator: '@nawinscript',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  category: 'technology',
+  classification: 'portfolio',
+  other: {
+    'msapplication-TileColor': '#FF6B6B',
+    'theme-color': '#FF6B6B',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'apple-mobile-web-app-title': 'SumTube',
+    'application-name': 'SumTube',
+    'mobile-web-app-capable': 'yes',
   },
 };
 
@@ -56,6 +86,36 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+         <head>
+          {/* Favicon Implementation - Comprehensive */}
+          <link rel="icon" href="/favicon.ico" sizes="any" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+          <link rel="manifest" href="/site.webmanifest" />
+
+          {/* Microsoft Tiles */}
+          <meta name="msapplication-TileColor" content="#FF6B6B" />
+          <meta name="msapplication-config" content="/browserconfig.xml" />
+
+          {/* Additional SEO Meta Tags */}
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+          <meta name="theme-color" content="#FF6B6B" />
+          <meta name="color-scheme" content="light dark" />
+          <meta property="og:logo" content="Chatbit" />
+
+
+          {/* Preconnect to external domains for performance */}
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+          {/* DNS Prefetch for analytics and external services */}
+          <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+          <link rel="dns-prefetch" href="//www.google-analytics.com" />
+
+          {/* Structured Data for SEO */}
+          <StructuredData type="website" />
+          <StructuredData type="webapplication" />
+          <StructuredData type="organization" />
+        </head>
       <body
         className={cn(
           "!font-default min-h-screen overflow-x-hidden bg-background text-foreground antialiased",
