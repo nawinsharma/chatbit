@@ -46,6 +46,16 @@ export default function CreateChat({
       const { data: session } = await authClient.getSession();
       console.log("Current session:", session);
       
+      // Test authentication with backend
+      try {
+        const authTest = await axios.get(`${Env.BACKEND_URL}/api/test-auth`, {
+          withCredentials: true,
+        });
+        console.log("Auth test result:", authTest.data);
+      } catch (authError) {
+        console.error("Auth test failed:", authError);
+      }
+      
       console.log("Creating chat group with payload:", payload);
       console.log("Backend URL:", Env.BACKEND_URL);
       console.log("Environment:", process.env.NODE_ENV);
