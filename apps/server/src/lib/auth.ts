@@ -35,6 +35,7 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
+    autoSignIn: true, // Automatically sign in users after successful signup
   },
   socialProviders: {
     google: {

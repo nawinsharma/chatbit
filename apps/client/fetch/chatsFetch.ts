@@ -5,7 +5,6 @@ export async function fetchChats(groupId: string) {
   
   const res = await fetch(`${Env.BACKEND_URL}/api/chats/${groupId}`, {
     cache: "no-cache",
-    credentials: 'include',
   });
 
   if (!res.ok) {

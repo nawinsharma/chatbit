@@ -6,6 +6,7 @@ import Chats from "./Chats";
 import { MessageType, GroupChatUserType, GroupChatType } from "@/type";
 import ChatNav from "./ChatNav";
 import { fetchChatGroupUsers } from "@/fetch/groupFetch";
+import { getSocket } from "@/lib/socket.config";
 
 export default function ChatBase({
   group,
@@ -49,6 +50,42 @@ export default function ChatBase({
       console.log("Setting chatUser to:", pData);
       setChatUser(pData);
     }
+  }, [group.id]);
+
+  // Socket event listeners for real-time user updates
+  useEffect(() => {
+    const socket = getSocket({ room: group.id });
+    
+    // Listen for user join events
+    const handleUserJoined = (data: { user: GroupChatUserType; group_id: string; timestamp: string }) => {
+      console.log("👤 User joined event received:", data);
+      if (data.group_id === group.id) {
+        setUsers(prevUsers => {
+          // Check if user already exists
+          const existingUser = prevUsers.find(u => u.id === data.user.id);
+          if (existingUser) {
+            return prevUsers; // User already exists, don't add duplicate
+          }
+          return [...prevUsers, data.user];
+        });
+      }
+    };
+
+    // Listen for user leave events
+    const handleUserLeft = (data: { user: GroupChatUserType; group_id: string; timestamp: string }) => {
+      console.log("👤 User left event received:", data);
+      if (data.group_id === group.id) {
+        setUsers(prevUsers => prevUsers.filter(u => u.id !== data.user.id));
+      }
+    };
+
+    socket.on('user_joined', handleUserJoined);
+    socket.on('user_left', handleUserLeft);
+
+    return () => {
+      socket.off('user_joined', handleUserJoined);
+      socket.off('user_left', handleUserLeft);
+    };
   }, [group.id]);
 
   // Refresh users and chat user when dialog closes (after successful join)

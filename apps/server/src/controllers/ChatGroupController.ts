@@ -13,9 +13,15 @@ class ChatGroupController {
       console.log("Session retrieved:", session);
       const user = session?.user;
       console.log("User from session:", user);
+      
+      // Check if user is authenticated
+      if (!user || !user.id) {
+        return res.status(401).json({ message: "Unauthorized: No valid user session found." });
+      }
+      
       const groups = await prisma.chatGroup.findMany({
         where: {
-          user_id: user?.id,
+          user_id: user.id,
         },
         orderBy: {
           created_at: "desc",
@@ -90,12 +96,18 @@ class ChatGroupController {
         headers: fromNodeHeaders(req.headers),
       });
       const user = session?.user;
+      
+      // Check if user is authenticated
+      if (!user || !user.id) {
+        return res.status(401).json({ message: "Unauthorized: No valid user session found." });
+      }
+      
       if (id) {
         await prisma.chatGroup.update({
           data: body,
           where: {
             id: id,
-            user_id: user?.id,
+            user_id: user.id,
           },
         });
         return res.json({ message: "Group updated successfully!" });
@@ -116,10 +128,16 @@ class ChatGroupController {
         headers: fromNodeHeaders(req.headers),
       });
       const user = session?.user;
+      
+      // Check if user is authenticated
+      if (!user || !user.id) {
+        return res.status(401).json({ message: "Unauthorized: No valid user session found." });
+      }
+      
       await prisma.chatGroup.delete({
         where: {
           id: id,
-          user_id: user?.id,
+          user_id: user.id,
         },
       });
       return res.json({ message: "Chat Group Deleted successfully!" });

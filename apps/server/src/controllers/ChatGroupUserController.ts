@@ -64,6 +64,42 @@ class ChatGroupUserController {
       const user = session?.user;
       const { group_id } = req.query;
       
+      if (!group_id) {
+        return res.status(400).json({ message: "Group ID is required." });
+      }
+      
+      // Verify that the chat group exists
+      const groupExists = await prisma.chatGroup.findUnique({
+        where: {
+          id: group_id as string,
+        },
+      });
+      
+      if (!groupExists) {
+        return res.status(404).json({ message: "Chat group not found." });
+      }
+      
+      // If user is authenticated, check if they have access to this chat group
+      if (user && user.id) {
+        const groupAccess = await prisma.chatGroup.findFirst({
+          where: {
+            id: group_id as string,
+            user_id: user.id,
+          },
+        });
+        
+        const groupMembership = await prisma.groupUsers.findFirst({
+          where: {
+            group_id: group_id as string,
+            name: user.name || user.email,
+          },
+        });
+        
+        if (!groupAccess && !groupMembership) {
+          return res.status(403).json({ message: "Forbidden: You don't have access to this chat group." });
+        }
+      }
+      
       // Clean up any existing duplicates before returning the list
       await ChatGroupUserController.cleanupDuplicateUsers(group_id as string);
       
@@ -92,6 +128,38 @@ class ChatGroupUserController {
         headers: fromNodeHeaders(req.headers),
       });
       const user = session?.user;
+      
+      // Verify that the chat group exists
+      const groupExists = await prisma.chatGroup.findUnique({
+        where: {
+          id: body.group_id,
+        },
+      });
+      
+      if (!groupExists) {
+        return res.status(404).json({ message: "Chat group not found." });
+      }
+      
+      // If user is authenticated, check if they're the creator or already a member
+      if (user && user.id) {
+        const groupAccess = await prisma.chatGroup.findFirst({
+          where: {
+            id: body.group_id,
+            user_id: user.id,
+          },
+        });
+        
+        const groupMembership = await prisma.groupUsers.findFirst({
+          where: {
+            group_id: body.group_id,
+            name: user.name || user.email,
+          },
+        });
+        
+        if (!groupAccess && !groupMembership) {
+          return res.status(403).json({ message: "Forbidden: You don't have access to this chat group." });
+        }
+      }
       
       // Clean up any existing duplicates first
       await ChatGroupUserController.cleanupDuplicateUsers(body.group_id);
@@ -127,6 +195,22 @@ class ChatGroupUserController {
           group_id: body.group_id,
         },
       });
+      
+      // Emit socket event to notify other users
+      try {
+        const io = req.app.get('io');
+        if (io) {
+          io.to(body.group_id).emit('user_joined', {
+            user: groupUser,
+            group_id: body.group_id,
+            timestamp: new Date().toISOString()
+          });
+          console.log(`📤 Emitted user_joined event for ${groupUser.name} in group ${body.group_id}`);
+        }
+      } catch (socketError) {
+        console.error("Failed to emit socket event:", socketError);
+        // Don't fail the request if socket emission fails
+      }
       
       return res.json({
         message: "User added to group successfully!",

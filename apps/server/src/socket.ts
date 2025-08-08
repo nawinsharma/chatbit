@@ -5,6 +5,7 @@ import prisma from "./lib/prisma";
 interface CustomSocket extends Socket {
   room?: string;
 }
+
 export function setupSocket(io: Server) {
   console.log('Setting up Socket.IO server...');
   
@@ -48,6 +49,28 @@ export function setupSocket(io: Server) {
       if (socket.room) {
         io.to(socket.room).emit("message", data);
         console.log(`📤 Message emitted to room ${socket.room}`);
+      }
+    });
+
+    // Handle user join event
+    socket.on("user_joined", async (data) => {
+      console.log("👤 User joined:", data);
+      
+      // Emit to all users in the room (including sender for confirmation)
+      if (socket.room) {
+        io.to(socket.room).emit("user_joined", data);
+        console.log(`📤 User joined event emitted to room ${socket.room}`);
+      }
+    });
+
+    // Handle user leave event
+    socket.on("user_left", async (data) => {
+      console.log("👤 User left:", data);
+      
+      // Emit to all users in the room
+      if (socket.room) {
+        io.to(socket.room).emit("user_left", data);
+        console.log(`📤 User left event emitted to room ${socket.room}`);
       }
     });
 

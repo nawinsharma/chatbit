@@ -11,11 +11,12 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useParams } from "next/navigation";
 import axios from "axios";
-import { GroupChatType } from "@/type";
+import { GroupChatType, GroupChatUserType } from "@/type";
 import { toast } from "sonner";
 import Env from "@/lib/env";
 import { MessageSquareIcon, KeyIcon, UserIcon } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { getSocket } from "@/lib/socket.config";
 
 export default function ChatUserDialog({
   open,
@@ -56,9 +57,9 @@ export default function ChatUserDialog({
 
       // If user is authenticated and is the room creator, auto-join them
       if (session?.user && session.user.id === group.user_id) {
+        const userName = session.user.name || session.user.email || 'Room Creator';
+        
         try {
-          const userName = session.user.name || session.user.email || 'Room Creator';
-          
           // Create/update the user entry for this room
           const { data: responseData } = await axios.post(`${Env.BACKEND_URL}/api/chat-group-user`, {
             name: userName,
@@ -76,9 +77,43 @@ export default function ChatUserDialog({
           toast.success(`Welcome back to ${group.title}!`);
           setOpen(false);
           onUserJoined?.(); // Notify parent that user joined
-        } catch (error) {
-          console.error("Auto-join failed:", error);
-          // If auto-join fails, fall back to the dialog
+        } catch (error: unknown) {
+          // Handle 409 Conflict (user already exists)
+          if (axios.isAxiosError(error) && error.response?.status === 409) {
+            console.log("User already exists in group, retrieving existing data");
+            try {
+              // Try to get the existing user data
+              const { data: usersData } = await axios.get(`${Env.BACKEND_URL}/api/chat-group-user?group_id=${params["id"] as string}`, {
+                withCredentials: true,
+              });
+              
+              // Find the existing user by name
+              const existingUser = usersData?.data?.find((user: GroupChatUserType) => 
+                user.name.toLowerCase().trim() === userName.toLowerCase().trim()
+              );
+              
+              if (existingUser) {
+                // Store existing user data in localStorage
+                localStorage.setItem(
+                  params["id"] as string,
+                  JSON.stringify(existingUser)
+                );
+                
+                toast.success(`Welcome back to ${group.title}!`);
+                setOpen(false);
+                onUserJoined?.(); // Notify parent that user joined
+              } else {
+                console.error("User not found in group despite 409 error");
+                // Fall back to the dialog
+              }
+            } catch (retrieveError) {
+              console.error("Failed to retrieve existing user data:", retrieveError);
+              // Fall back to the dialog
+            }
+          } else {
+            console.error("Auto-join failed:", error);
+            // If auto-join fails, fall back to the dialog
+          }
         }
       }
       
@@ -118,6 +153,19 @@ export default function ChatUserDialog({
         params["id"] as string,
         JSON.stringify(data?.data)
       );
+      
+      // Emit socket event to notify other users immediately
+      try {
+        const socket = getSocket({ room: params["id"] as string });
+        socket.emit('user_joined', {
+          user: data?.data,
+          group_id: params["id"] as string,
+          timestamp: new Date().toISOString()
+        });
+        console.log("📤 Emitted user_joined event from frontend");
+      } catch (socketError) {
+        console.error("Failed to emit socket event from frontend:", socketError);
+      }
       
       toast.success(`Welcome to ${group.title}!`);
       setOpen(false);

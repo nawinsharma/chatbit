@@ -34,12 +34,15 @@ const io = new Server(httpServer, {
   allowEIO3: true
 });
 
+// Make io instance available to controllers
+app.set('io', io);
+
 // Setup Socket.IO handlers
 setupSocket(io);
 
 app.use(
   cors({
-    origin: ["https://chatbit.nawin.xyz"], // Only your frontend domain, no trailing slash
+    origin: ["https://chatbit.nawin.xyz", "http://localhost:3000", "http://127.0.0.1:3000"], // Only your frontend domain, no trailing slash
     credentials: true, // Allow cookies
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
