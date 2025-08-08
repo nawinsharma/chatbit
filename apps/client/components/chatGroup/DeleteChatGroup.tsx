@@ -12,19 +12,16 @@ import {
 import axios from "axios";
 import { toast } from "sonner";
 import { clearCache } from "@/actions/revalidateCache";
-import Env from "@/lib/env";
 
 export default function DeleteChatGroup({
   open,
   setOpen,
   groupId,
-  token,
   onSuccess,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   groupId: string;
-  token: string;
   onSuccess?: () => Promise<void>;
 }) {
   const [loading, setLoading] = useState(false);
@@ -52,17 +49,21 @@ export default function DeleteChatGroup({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent>
+      <AlertDialogContent className="w-[90vw] max-w-md sm:max-w-lg">
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogTitle className="text-lg sm:text-xl">Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription className="text-sm sm:text-base">
             This action cannot be undone. This will permanently delete your chat
             group and its conversations.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction disabled={loading} onClick={deleteChatGroup}>
+        <AlertDialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
+          <AlertDialogCancel className="w-full sm:w-auto text-sm sm:text-base">Cancel</AlertDialogCancel>
+          <AlertDialogAction 
+            disabled={loading} 
+            onClick={deleteChatGroup}
+            className="w-full sm:w-auto text-sm sm:text-base"
+          >
             {loading ? "Processing.." : "Continue"}
           </AlertDialogAction>
         </AlertDialogFooter>

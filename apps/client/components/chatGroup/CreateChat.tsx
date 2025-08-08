@@ -93,28 +93,43 @@ export default function CreateChat({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <ShimmerButton className="shadow-2xl ">
-          <PlusIcon size={20} className="text-white mr-3" />
-          <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-md">
+        <ShimmerButton className="shadow-2xl text-sm sm:text-base">
+          <PlusIcon size={18} className="text-white mr-2 sm:mr-3" />
+          <span className="whitespace-pre-wrap text-center text-xs sm:text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-md">
             Create Room
           </span>
         </ShimmerButton>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[90vw] max-w-md sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Create your new Chat</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">Create your new Chat</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mt-4">
-            <Input placeholder="Enter chat title" {...register("title")} />
-            <span className="text-red-400">{errors.title?.message}</span>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <Input 
+              placeholder="Enter chat title" 
+              {...register("title")} 
+              className="text-sm sm:text-base"
+            />
+            {errors.title && (
+              <span className="text-red-400 text-xs sm:text-sm mt-1 block">{errors.title.message}</span>
+            )}
           </div>
-          <div className="mt-4">
-            <Input placeholder="Enter passcode" {...register("passcode")} />
-            <span className="text-red-400">{errors.passcode?.message}</span>
+          <div>
+            <Input 
+              placeholder="Enter passcode" 
+              {...register("passcode")} 
+              className="text-sm sm:text-base"
+            />
+            {errors.passcode && (
+              <span className="text-red-400 text-xs sm:text-sm mt-1 block">{errors.passcode.message}</span>
+            )}
           </div>
-          <div className="mt-4">
-            <Button className="w-full bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80" disabled={loading}>
+          <div>
+            <Button 
+              className="w-full bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80 text-sm sm:text-base py-2 sm:py-3" 
+              disabled={loading}
+            >
               {loading ? "Processing.." : "Submit"}
             </Button>
           </div>

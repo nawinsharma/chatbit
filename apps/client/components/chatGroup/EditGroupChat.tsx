@@ -20,7 +20,6 @@ import { GroupChatType } from "@/type";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { clearCache } from "@/actions/revalidateCache";
-import Env from "@/lib/env";
 
 export default function EditGroupChat({
   user,
@@ -83,21 +82,36 @@ export default function EditGroupChat({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent className="w-[90vw] max-w-md sm:max-w-lg" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>Update group chat</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">Update group chat</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mt-4">
-            <Input placeholder="Enter chat title" {...register("title")} />
-            <span className="text-red-400">{errors.title?.message}</span>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <Input 
+              placeholder="Enter chat title" 
+              {...register("title")} 
+              className="text-sm sm:text-base"
+            />
+            {errors.title && (
+              <span className="text-red-400 text-xs sm:text-sm mt-1 block">{errors.title.message}</span>
+            )}
           </div>
-          <div className="mt-4">
-            <Input placeholder="Enter passcode" {...register("passcode")} />
-            <span className="text-red-400">{errors.passcode?.message}</span>
+          <div>
+            <Input 
+              placeholder="Enter passcode" 
+              {...register("passcode")} 
+              className="text-sm sm:text-base"
+            />
+            {errors.passcode && (
+              <span className="text-red-400 text-xs sm:text-sm mt-1 block">{errors.passcode.message}</span>
+            )}
           </div>
-          <div className="mt-4">
-            <Button className="w-full" disabled={loading}>
+          <div>
+            <Button 
+              className="w-full text-sm sm:text-base py-2 sm:py-3" 
+              disabled={loading}
+            >
               {loading ? "Processing.." : "Submit"}
             </Button>
           </div>

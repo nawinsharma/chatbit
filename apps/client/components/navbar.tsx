@@ -77,6 +77,7 @@ export function Nav() {
                     href="/dashboard" 
                     variant="secondary"
                     as={Link}
+                    className="text-xs sm:text-sm px-3 sm:px-4 py-2"
                   >
                     Dashboard
                   </NavbarButton>
@@ -84,15 +85,15 @@ export function Nav() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-blue-600 dark:bg-blue-500 text-white text-sm font-semibold">
+                      <Avatar className="h-7 w-7 sm:h-8 sm:w-8">
+                        <AvatarFallback className="bg-blue-600 dark:bg-blue-500 text-white text-xs sm:text-sm font-semibold">
                           {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase() || 'U'}
                         </AvatarFallback>
                       </Avatar>
                       <span className="hidden sm:block text-sm font-medium text-foreground">
                         {user.name || user.email}
                       </span>
-                      <ChevronDownIcon className="h-4 w-4 text-muted-foreground" />
+                      <ChevronDownIcon className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 bg-background border-border">
@@ -106,7 +107,7 @@ export function Nav() {
                     <SignOutForm>
                       <DropdownMenuItem asChild>
                         <button 
-                          className="flex items-center gap-2 w-full text-left text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-muted/50"
+                          className="flex items-center gap-2 w-full text-left text-white hover:text-gray-300 hover:bg-muted/50"
                         >
                           <LogOutIcon className="h-4 w-4" />
                           Sign Out
@@ -122,6 +123,7 @@ export function Nav() {
                   href="/sign-in" 
                   variant="secondary"
                   as={Link}
+                  className="text-xs sm:text-sm px-3 sm:px-4 py-2"
                 >
                   Login
                 </NavbarButton>
@@ -129,6 +131,7 @@ export function Nav() {
                   href="/sign-up" 
                   variant="primary"
                   as={Link}
+                  className="text-xs sm:text-sm px-3 sm:px-4 py-2"
                 >
                   Sign Up
                 </NavbarButton>
@@ -150,63 +153,68 @@ export function Nav() {
             </div>
           </MobileNavHeader>
           <MobileNavMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)}>
-            {navItems.map((item, index) => (
-              <Link
-                key={index}
-                href={item.link}
-                className="block px-4 py-2 text-foreground hover:bg-muted rounded-md transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <div className="border-t border-border mt-4 pt-4 px-4 space-y-2">
+            {/* User Section */}
+            <div className="border-t border-border/50 mt-4 pt-4 flex flex-col items-center justify-center">
               {user ? (
                 <>
-                  <div className="flex items-center gap-3 px-4 py-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-blue-600 dark:bg-blue-500 text-white text-sm font-semibold">
-                        {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase() || 'U'}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium text-foreground">{user.name || 'User'}</span>
-                      <span className="text-xs text-muted-foreground">{user.email}</span>
+                  {/* User Profile Card */}
+                  <div className="px-4 py-4 mb-4">
+                    <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-xl border border-blue-200/50 dark:border-blue-800/50">
+                      <Avatar className="h-12 w-12 ring-2 ring-blue-200 dark:ring-blue-800">
+                        <AvatarFallback className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white text-lg font-semibold">
+                          {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase() || 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-semibold text-foreground truncate">
+                          {user.name || 'User'}
+                        </h4>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {user.email}
+                        </p>
+                        <div className="flex items-center gap-1 mt-1">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span className="text-xs text-green-600 dark:text-green-400 font-medium">
+                            Online
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  {!isDashboard && (
-                    <Link
-                      href="/dashboard"
-                      className="block py-2 text-foreground hover:text-primary transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                  )}
-                  <SignOutForm>
-                    <Button
-                      className="block w-full cursor-pointer text-left py-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
-                    >
-                      Sign Out
-                    </Button>
-                  </SignOutForm>
+
+                  {/* User Actions */}
+                  <div className="space-y-1">
+                    <SignOutForm>
+                      <Button
+                        className="flex items-center gap-3 px-4 py-3 text-sm sm:text-base text-white hover:text-gray-200 bg-red-600 hover:bg-red-700 transition-colors rounded-lg w-full justify-start"
+                      >
+                          <LogOutIcon className="h-4 w-4 text-white" />
+                        <span className="group-hover:translate-x-1 transition-transform duration-200 font-semibold">
+                          Sign Out
+                        </span>
+                      </Button>
+                    </SignOutForm>
+                  </div>
                 </>
               ) : (
                 <>
-                  <Link
-                    href="/sign-in"
-                    className="block py-2 text-foreground hover:text-primary transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/sign-up"
-                    className="block py-2 text-foreground hover:text-primary transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
+                  {/* Guest Actions */}
+                  <div className="space-y-3 px-4">
+                    <Link
+                      href="/sign-in"
+                      className="flex items-center justify-center w-full px-4 py-3 text-sm sm:text-base font-medium text-foreground bg-muted/50 hover:bg-muted rounded-lg transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      href="/sign-up"
+                      className="flex items-center justify-center w-full px-4 py-3 text-sm sm:text-base font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg transition-colors shadow-lg"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
                 </>
               )}
             </div>
