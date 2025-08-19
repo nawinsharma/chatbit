@@ -25,4 +25,8 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: REDIS_URL
-        sync: false 
+        sync: false
+      - key: KEEP_ALIVE
+        value: true
+      - key: KEEP_ALIVE_INTERVAL_MS
+        value: "540000" # 9 minutes 

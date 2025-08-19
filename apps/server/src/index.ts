@@ -201,6 +201,26 @@ httpServer.listen(port, "::", () => {
   console.log(`✅ Ready endpoint available at: http://localhost:${port}/ready`);
 });
 
+// Keep-alive pinger for free Render plan
+if (process.env.NODE_ENV === "production") {
+  const pingUrl = "https://chatbit-server.onrender.com/health";
+  const intervalMs = Number( 10 * 60 * 1000); // 10 minutes
+
+  if (pingUrl) {
+    setInterval(async () => {
+      try {
+        await fetch(pingUrl, { method: "GET" });
+      } catch (err) {
+        // swallow errors; this is best-effort
+        console.error("Keep-alive pinger error:", err);
+      }
+    }, intervalMs);
+    console.log(`🏓 Keep-alive enabled. Pinging ${pingUrl} every ${intervalMs}ms`);
+  } else {
+    console.warn("KEEP_ALIVE is true but no base URL detected (RENDER_EXTERNAL_URL/PUBLIC_URL missing). Skipping keep-alive pinger.");
+  }
+}
+
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
   console.log('🛑 Received SIGTERM, shutting down gracefully...');
